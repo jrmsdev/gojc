@@ -10,7 +10,7 @@ import (
 
 	golog "log"
 
-	"github.com/jrmsdev/gojc/log"
+	"github.com/jrmsdev/gojc/log2"
 
 	. "github.com/jrmsdev/gojc/testing/check"
 )

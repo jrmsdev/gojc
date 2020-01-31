@@ -4,72 +4,57 @@
 package log
 
 import (
-	"strings"
-	"sync"
-
 	"github.com/jrmsdev/gojc/log/internal/logger"
 )
 
-var l logger.Logger
-var m *sync.Mutex
+var l *logger.Logger
 
 func init() {
-	m = &sync.Mutex{}
-	setLogger(logger.OFF)
+	l, _ = logger.New("quiet")
 }
 
-func setLogger(lvl string) error {
-	m.Lock()
-	defer m.Unlock()
+func Init(level string) error {
 	var err error
-	l, err = logger.New(strings.ToUpper(lvl))
+	l, err = logger.New(level)
 	return err
 }
 
-func Init(lvl string) (err error) {
-	return setLogger(lvl)
-}
-
-func SetFlags(flags string) {
-	l.SetFlags(flags)
-}
-
 func Error(args ...interface{}) {
-	l.Error(args...)
+	l.Error(l.Format("error", args...))
 }
 
-func Errorf(fmt string, args ...interface{}) {
-	l.Errorf(fmt, args...)
+func Errorf(format string, args ...interface{}) {
+	l.Error(l.Formatf("error", format, args...))
 }
 
 func Warn(args ...interface{}) {
-	l.Warn(args...)
+	l.Warn(l.Format("warn", args...))
 }
 
-func Warnf(fmt string, args ...interface{}) {
-	l.Warnf(fmt, args...)
+func Warnf(format string, args ...interface{}) {
+	l.Warn(l.Formatf("warn", format, args...))
 }
 
 func Print(args ...interface{}) {
-	l.Print(args...)
+	l.Print(l.Format("msg", args...))
 }
 
-func Printf(fmt string, args ...interface{}) {
-	l.Printf(fmt, args...)
+func Printf(format string, args ...interface{}) {
+	l.Print(l.Formatf("msg", format, args...))
 }
 
 func Info(args ...interface{}) {
-	l.Info(args...)
+	l.Info(l.Format("info", args...))
 }
 
-func Infof(fmt string, args ...interface{}) {
-	l.Infof(fmt, args...)
+func Infof(format string, args ...interface{}) {
+	l.Info(l.Formatf("info", format, args...))
 }
 
 func Debug(args ...interface{}) {
-	l.Debug(args...)
+	l.Debug(l.Format("debug", args...))
 }
 
-func Debugf(fmt string, args ...interface{}) {
-	l.Debugf(fmt, args...)
+func Debugf(format string, args ...interface{}) {
+	l.Debug(l.Formatf("debug", format, args...))
 }
