@@ -10,6 +10,7 @@ import (
 	golog "log"
 
 	"github.com/jrmsdev/gojc/log"
+	log2 "github.com/jrmsdev/gojc/log2"
 )
 
 func benchSetup(b *testing.B) *os.File {
@@ -31,6 +32,19 @@ func BenchmarkOff(b *testing.B) {
 	log.SetLevel("off")
 	for i := 0; i < b.N; i++ {
 		log.Debugf("%d", i)
+	}
+}
+
+func BenchmarkLog2Off(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log2.SetLevel("off")
+	for i := 0; i < b.N; i++ {
+		log2.Debugf("%d", i)
 	}
 }
 
@@ -70,6 +84,19 @@ func BenchmarkDebug(b *testing.B) {
 	log.SetLevel("debug")
 	for i := 0; i < b.N; i++ {
 		log.Debugf("%d", i)
+	}
+}
+
+func BenchmarkLog2Debug(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log2.SetLevel("debug")
+	for i := 0; i < b.N; i++ {
+		log2.Debugf("%d", i)
 	}
 }
 
