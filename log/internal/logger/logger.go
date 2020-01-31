@@ -4,6 +4,7 @@
 package logger
 
 import (
+	"errors"
 	"log"
 )
 
@@ -34,19 +35,19 @@ func init() {
 	log.SetFlags(flagsDefault)
 }
 
-func New(lvl string) Logger {
+func New(lvl string) (Logger, error) {
 	if lvl == OFF {
-		return &OffLogger{base}
+		return &OffLogger{base}, nil
 	} else if lvl == ERROR {
-		return &ErrorLogger{base}
+		return &ErrorLogger{base}, nil
 	} else if lvl == WARN {
-		return &WarnLogger{base}
+		return &WarnLogger{base}, nil
 	} else if lvl == MSG {
-		return &MsgLogger{base}
+		return &MsgLogger{base}, nil
 	} else if lvl == INFO {
-		return &InfoLogger{base}
+		return &InfoLogger{base}, nil
 	} else if lvl == DEBUG {
-		return &DebugLogger{base}
+		return &DebugLogger{base}, nil
 	}
-	panic("unkown logger: " + lvl)
+	return nil, errors.New("invalid log level: " + lvl)
 }

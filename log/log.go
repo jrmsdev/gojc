@@ -4,11 +4,10 @@
 package log
 
 import (
-	"errors"
 	"strings"
 	"sync"
 
-	"github.com/jrmsdev/gojc/internal/logger"
+	"github.com/jrmsdev/gojc/log/internal/logger"
 )
 
 var l logger.Logger
@@ -19,25 +18,16 @@ func init() {
 	setLogger(logger.OFF)
 }
 
-func setLogger(lvl string) {
+func setLogger(lvl string) error {
 	m.Lock()
 	defer m.Unlock()
-	l = logger.New(strings.ToUpper(lvl))
+	var err error
+	l, err = logger.New(strings.ToUpper(lvl))
+	return err
 }
 
 func Init(lvl string) (err error) {
-	// TODO: defer recover from possible logger.New panic
-	defer func() {
-		if e := recover(); e != nil {
-			if s, ok := e.(string); ok {
-				err = errors.New(s)
-			} else {
-				panic(e)
-			}
-		}
-	}()
-	setLogger(lvl)
-	return err
+	return setLogger(lvl)
 }
 
 func SetFlags(flags string) {
