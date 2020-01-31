@@ -1,5 +1,5 @@
 #!/bin/sh
 set -eu
 ARGS=${@:-'./...'}
-go test ${ARGS}
+go test -mod=vendor ${ARGS}
 exit 0
