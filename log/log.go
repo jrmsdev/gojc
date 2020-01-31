@@ -10,13 +10,11 @@ import (
 var l *logger.Logger
 
 func init() {
-	l, _ = logger.New("quiet")
+	l, _ = logger.New("off")
 }
 
-func Init(level string) error {
-	var err error
-	l, err = logger.New(level)
-	return err
+func SetLevel(level string) error {
+	return l.SetLevel(level)
 }
 
 func Error(args ...interface{}) {

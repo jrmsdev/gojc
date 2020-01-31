@@ -31,6 +31,12 @@ func init() {
 	}
 }
 
+func off(msg string) {}
+
+func out(msg string) {
+	log.Output(3, msg)
+}
+
 type Logger struct {
 	Format  func(lvl string, args ...interface{}) string
 	Formatf func(lvl string, fmt string, args ...interface{}) string
@@ -43,17 +49,22 @@ type Logger struct {
 
 func New(level string) (*Logger, error) {
 	l := new(Logger)
-	if level == "debug" {
-		l.Error = out
-		l.Warn = out
-		l.Print = out
-		l.Info = out
-		l.Debug = out
-	} else if level == "warn" {
-		l.Error = out
-		l.Warn = out
-		l.Print = out
-		l.Info = out
+	l.Format = mfmt
+	l.Formatf = mfmtf
+	l.Error = off
+	l.Warn = off
+	l.Print = off
+	l.Info = off
+	l.Debug = off
+	return l, l.SetLevel(level)
+}
+
+func (l *Logger) SetLevel(level string) error {
+	if level == "off" {
+		l.Error = off
+		l.Warn = off
+		l.Print = off
+		l.Info = off
 		l.Debug = off
 	} else if level == "error" {
 		l.Error = out
@@ -61,14 +72,32 @@ func New(level string) (*Logger, error) {
 		l.Print = off
 		l.Info = off
 		l.Debug = off
-	} else if level == "quiet" {
-		l.Error = off
-		l.Warn = off
+	} else if level == "warn" {
+		l.Error = out
+		l.Warn = out
 		l.Print = off
 		l.Info = off
 		l.Debug = off
+	} else if (level == "msg" || level == "default") {
+		l.Error = out
+		l.Warn = out
+		l.Print = out
+		l.Info = off
+		l.Debug = off
+	} else if level == "info" {
+		l.Error = out
+		l.Warn = out
+		l.Print = out
+		l.Info = out
+		l.Debug = off
+	} else if level == "debug" {
+		l.Error = out
+		l.Warn = out
+		l.Print = out
+		l.Info = out
+		l.Debug = out
 	} else {
-		return nil, errors.New("invalid log level: " + level)
+		return errors.New("invalid log level: " + level)
 	}
 	if colored {
 		l.Format = color
@@ -77,7 +106,7 @@ func New(level string) (*Logger, error) {
 		l.Format = mfmt
 		l.Formatf = mfmtf
 	}
-	return l, nil
+	return nil
 }
 
 var (
@@ -107,8 +136,6 @@ var lvlColor = map[string]string{
 	"debug": green,
 }
 
-// message format/color functions
-
 func mfmt(lvl string, args ...interface{}) string {
 	tag := lvlTag[lvl]
 	return fmt.Sprintf("%s%s", tag, fmt.Sprint(args...))
@@ -127,11 +154,4 @@ func color(lvl string, args ...interface{}) string {
 func colorf(lvl string, format string, args ...interface{}) string {
 	clr := lvlColor[lvl]
 	return fmt.Sprint(clr, fmt.Sprintf(format, args...), reset)
-}
-
-func off(msg string) {
-}
-
-func out(msg string) {
-	log.Output(3, msg)
 }
