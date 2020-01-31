@@ -22,8 +22,9 @@ type E struct {
 }
 
 func New(name string) *E {
+	id := gfmt.Sprintf("%s %s", time.Now().String(), name)
 	return &E{
-		sha256.Sum256([]byte(time.Now().String())),
+		sha256.Sum256([]byte(id)),
 		name,
 		"",
 	}
