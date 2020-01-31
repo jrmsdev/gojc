@@ -50,7 +50,7 @@ func New(lvl int, colored bool) Logger {
 	if colored {
 		fn = color
 	}
-	return &L{lvl, 3, fn}
+	return &L{lvl, 4, fn}
 }
 
 func print(l *L, lvl int, msg string) {

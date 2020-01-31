@@ -52,16 +52,32 @@ func Error(args ...interface{}) {
 	l.Print(logger.ERROR, args...)
 }
 
+func Errorf(fmt string, args ...interface{}) {
+	l.Printf(logger.ERROR, fmt, args...)
+}
+
 func Warn(args ...interface{}) {
 	l.Print(logger.WARN, args...)
+}
+
+func Warnf(fmt string, args ...interface{}) {
+	l.Printf(logger.WARN, fmt, args...)
 }
 
 func Print(args ...interface{}) {
 	l.Print(logger.MSG, args...)
 }
 
+func Printf(fmt string, args ...interface{}) {
+	l.Printf(logger.MSG, fmt, args...)
+}
+
 func Info(args ...interface{}) {
 	l.Print(logger.INFO, args...)
+}
+
+func Infof(fmt string, args ...interface{}) {
+	l.Printf(logger.INFO, fmt, args...)
 }
 
 func Debug(args ...interface{}) {
@@ -69,5 +85,5 @@ func Debug(args ...interface{}) {
 }
 
 func Debugf(fmt string, args ...interface{}) {
-	l.Print(logger.DEBUG, args...)
+	l.Printf(logger.DEBUG, fmt, args...)
 }
