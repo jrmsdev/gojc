@@ -76,7 +76,6 @@ func TestLog(t *testing.T) {
 func TestInit(t *testing.T) {
 	err := log.SetLevel("debug")
 	if err != nil {
-		t.Log(err)
 		t.Error(err)
 	}
 }

@@ -56,3 +56,26 @@ func Debug(args ...interface{}) {
 func Debugf(format string, args ...interface{}) {
 	l.Debug(l.Formatf("debug", format, args...))
 }
+
+func BenchIf(lvl string, args ...interface{}) {
+	if lvl == "error" {
+	} else if lvl == "info" {
+	} else if lvl == "debug" {
+		l.Debug(l.Format("debug", args...))
+	}
+}
+
+func BenchSwitch(lvl string, args ...interface{}) {
+	switch lvl {
+		case "error":
+			l.Error(l.Format("error", args...))
+
+		case "info":
+			l.Info(l.Format("info", args...))
+
+		case "debug":
+			l.Debug(l.Format("debug", args...))
+
+		default:
+	}
+}

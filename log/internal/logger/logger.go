@@ -11,7 +11,7 @@ import (
 	"sync"
 )
 
-var colored  bool
+var colored bool
 var flagsDefault int = log.Ldate | log.Ltime | log.Lmicroseconds | log.Llongfile
 
 func istty(fh *os.File) bool {
@@ -84,7 +84,7 @@ func (l *Logger) SetLevel(level string) error {
 		l.Print = off
 		l.Info = off
 		l.Debug = off
-	} else if (level == "msg" || level == "default") {
+	} else if level == "msg" || level == "default" {
 		l.Error = out
 		l.Warn = out
 		l.Print = out
@@ -117,7 +117,7 @@ func (l *Logger) SetLevel(level string) error {
 
 var (
 	white = "\033[0;0m"
-	cyan = "\033[0;36m"
+	cyan  = "\033[0;36m"
 	//~ blue = "\033[0;34m"
 	red    = "\033[0;31m"
 	yellow = "\033[0;33m"
@@ -130,7 +130,7 @@ var lvlTag = map[string]string{
 	"error": "[E] ",
 	"warn":  "[W] ",
 	"msg":   "",
-	"info":   "[I] ",
+	"info":  "[I] ",
 	"debug": "[D] ",
 }
 
