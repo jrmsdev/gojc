@@ -8,54 +8,56 @@ import (
 	"log"
 )
 
-type BaseLogger struct {
-	depth int
-}
+type BaseLogger struct {}
 
 func newBaseLogger() *BaseLogger {
-	return &BaseLogger{4}
+	return &BaseLogger{}
 }
 
 func (l *BaseLogger) SetFlags(flags string) {
 	// TODO: implement SetFlags
 }
 
+func (l *BaseLogger) out(prefix, msg string) {
+	log.Output(5, fmt.Sprintf("%s%s", prefix, msg))
+}
+
 func (l *BaseLogger) err(args ...interface{}) {
-	log.Output(l.depth, "[E] "+fmt.Sprint(args...))
+	l.out("[E] ", fmt.Sprint(args...))
 }
 
 func (l *BaseLogger) errf(f string, args ...interface{}) {
-	log.Output(l.depth, "[E] "+fmt.Sprintf(f, args...))
+	l.out("[E] ", fmt.Sprintf(f, args...))
 }
 
 func (l *BaseLogger) wrn(args ...interface{}) {
-	log.Output(l.depth, "[W] "+fmt.Sprint(args...))
+	l.out("[W] ", fmt.Sprint(args...))
 }
 
 func (l *BaseLogger) wrnf(f string, args ...interface{}) {
-	log.Output(l.depth, "[W] "+fmt.Sprintf(f, args...))
+	l.out("[W] ", fmt.Sprintf(f, args...))
 }
 
 func (l *BaseLogger) prt(args ...interface{}) {
-	log.Output(l.depth, fmt.Sprint(args...))
+	l.out("", fmt.Sprint(args...))
 }
 
 func (l *BaseLogger) prtf(f string, args ...interface{}) {
-	log.Output(l.depth, fmt.Sprintf(f, args...))
+	l.out("", fmt.Sprintf(f, args...))
 }
 
 func (l *BaseLogger) inf(args ...interface{}) {
-	log.Output(l.depth, "[I] "+fmt.Sprint(args...))
+	l.out("[I] ", fmt.Sprint(args...))
 }
 
 func (l *BaseLogger) inff(f string, args ...interface{}) {
-	log.Output(l.depth, "[I] "+fmt.Sprintf(f, args...))
+	l.out("[I] ", fmt.Sprintf(f, args...))
 }
 
 func (l *BaseLogger) dbg(args ...interface{}) {
-	log.Output(l.depth, "[D] "+fmt.Sprint(args...))
+	l.out("[D] ", fmt.Sprint(args...))
 }
 
 func (l *BaseLogger) dbgf(f string, args ...interface{}) {
-	log.Output(l.depth, "[D] "+fmt.Sprintf(f, args...))
+	l.out("[D] ", fmt.Sprintf(f, args...))
 }
