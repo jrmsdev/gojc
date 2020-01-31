@@ -1,8 +1,5 @@
 #!/bin/sh
 set -eu
-ARGS=$@
-if test "X" = "X${ARGS}"; then
-	ARGS='./...'
-fi
+ARGS=${@:-'./...'}
 go test ${ARGS}
 exit 0
