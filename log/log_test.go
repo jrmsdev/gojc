@@ -37,7 +37,7 @@ func TestLog(t *testing.T) {
 	log.Print("t0")
 	check(t, "")
 
-	log.Init("debug")
+	log.SetLevel("debug")
 
 	log.Error("e1")
 	check(t, "e1")
@@ -74,7 +74,7 @@ func TestLog(t *testing.T) {
 }
 
 func TestInit(t *testing.T) {
-	err := log.Init("debug")
+	err := log.SetLevel("debug")
 	if err != nil {
 		t.Log(err)
 		t.Error(err)
@@ -82,7 +82,7 @@ func TestInit(t *testing.T) {
 }
 
 func TestInitFail(t *testing.T) {
-	err := log.Init("fail")
+	err := log.SetLevel("fail")
 	if err == nil {
 		t.Error("no error")
 	}

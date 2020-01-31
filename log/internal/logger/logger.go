@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sync"
 )
 
 var colored  bool
@@ -45,10 +46,13 @@ type Logger struct {
 	Print   func(msg string)
 	Info    func(msg string)
 	Debug   func(msg string)
+
+	m *sync.Mutex
 }
 
 func New(level string) (*Logger, error) {
 	l := new(Logger)
+	l.m = new(sync.Mutex)
 	l.Format = mfmt
 	l.Formatf = mfmtf
 	l.Error = off
@@ -60,6 +64,8 @@ func New(level string) (*Logger, error) {
 }
 
 func (l *Logger) SetLevel(level string) error {
+	l.m.Lock()
+	defer l.m.Unlock()
 	if level == "off" {
 		l.Error = off
 		l.Warn = off
