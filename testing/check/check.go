@@ -1,6 +1,14 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
+/*
+Package check implements utilities to be used for asserting testing results.
+
+Each function is a condition that must succeed, otherwise the test fails.
+
+If a condition fails, execution of the test continues unless it's marked as
+Fatal. See the examples.
+*/
 package check
 
 import (
@@ -9,12 +17,18 @@ import (
 	"testing"
 )
 
-func Fatal(t *testing.T, ok bool) {
+// Fatal calls t.FailNow() if ok condition is false.
+//
+// So test execution is aborted, otherwise the test is marked as failed but
+// execution continues.
+func Fatal(t *testing.T, ok bool) bool {
 	if !ok {
 		t.FailNow()
 	}
+	return true
 }
 
+// IsNil fails if got param is not nil.
 func IsNil(t *testing.T, got interface{}, errmsg string) bool {
 	t.Helper()
 	if got != nil {
@@ -24,6 +38,7 @@ func IsNil(t *testing.T, got interface{}, errmsg string) bool {
 	return true
 }
 
+// NotNil fails if got param is not nil.
 func NotNil(t *testing.T, got interface{}, errmsg string) bool {
 	t.Helper()
 	if got == nil {
@@ -33,6 +48,7 @@ func NotNil(t *testing.T, got interface{}, errmsg string) bool {
 	return true
 }
 
+// IsTrue fails if got param is not true.
 func IsTrue(t *testing.T, got bool, errmsg string) bool {
 	t.Helper()
 	if !got {
@@ -42,6 +58,7 @@ func IsTrue(t *testing.T, got bool, errmsg string) bool {
 	return true
 }
 
+// IsFalse fails if got param is not false.
 func IsFalse(t *testing.T, got bool, errmsg string) bool {
 	t.Helper()
 	if got {
@@ -51,6 +68,7 @@ func IsFalse(t *testing.T, got bool, errmsg string) bool {
 	return true
 }
 
+// IsEqual fails if got != expect.
 func IsEqual(t *testing.T, got, expect interface{}, errmsg string) bool {
 	t.Helper()
 	if got != expect {
@@ -60,6 +78,7 @@ func IsEqual(t *testing.T, got, expect interface{}, errmsg string) bool {
 	return true
 }
 
+// NotEqual fails if got == expect.
 func NotEqual(t *testing.T, got, expect interface{}, errmsg string) bool {
 	t.Helper()
 	if got == expect {
@@ -69,6 +88,7 @@ func NotEqual(t *testing.T, got, expect interface{}, errmsg string) bool {
 	return true
 }
 
+// Match fails if string s does not match pat regexp.
 func Match(t *testing.T, pat, s, errmsg string) bool {
 	t.Helper()
 	m, err := regexp.MatchString(pat, s)
@@ -83,6 +103,7 @@ func Match(t *testing.T, pat, s, errmsg string) bool {
 	return true
 }
 
+// NotMatch fails if string s matches pat regexp.
 func NotMatch(t *testing.T, pat, s, errmsg string) bool {
 	t.Helper()
 	m, err := regexp.MatchString(pat, s)

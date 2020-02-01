@@ -24,11 +24,11 @@ const (
 )
 
 var levelTag = map[int]string{
-	OFF: "",
+	OFF:   "",
 	ERROR: "[E] ",
-	WARN: "[W] ",
-	MSG: "",
-	INFO: "[I] ",
+	WARN:  "[W] ",
+	MSG:   "",
+	INFO:  "[I] ",
 	DEBUG: "[D] ",
 }
 
@@ -39,7 +39,7 @@ type Logger interface {
 }
 
 type L struct {
-	lvl int
+	lvl   int
 	depth int
 	print func(l *L, lvl int, msg string)
 }
@@ -55,7 +55,7 @@ func New(lvl int, colored bool) Logger {
 
 func print(l *L, lvl int, msg string) {
 	tag := levelTag[lvl]
-	log.Output(l.depth, tag + msg)
+	log.Output(l.depth, tag+msg)
 }
 
 func (l *L) SetLevel(lvl int) error {
@@ -102,5 +102,5 @@ var levelColor = map[int]string{
 
 func color(l *L, lvl int, msg string) {
 	clr := levelColor[lvl]
-	log.Output(l.depth, clr + msg + reset)
+	log.Output(l.depth, clr+msg+reset)
 }
