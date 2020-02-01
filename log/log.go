@@ -8,27 +8,47 @@ Messages are printed using standard's Go log package so the lib can nicely work
 with other's application code.
 
 By default only error, warning and feedback messages are printed, but other
-levels of messages can be set as follows:
+levels of messages can be set.
 
-	* off: no messages at all, not even error messages.
+	Panic and Fatal messages are always printed, even in off mode.
+	They can NOT be set as a valid log level though.
+
+	Valid log levels are:
+
+	* off:   no messages, not even errors (except for panic and fatal).
 	* error: error messages only.
-	* warn: warning + error messages.
-	* msg: warning + error + feedback (Print and Printf) messages.
-	* info: warning + error + msg + extra info messages.
+	* warn:  error and warning messages.
+	* msg:   error, warning and feedback (Print and Printf) messages.
+	* info:  error, warning, msg and extra info messages.
 	* debug: all previous messages plus debug info.
 
-Other useful levels are set:
+	Some handy aliases are also accepted:
 
-	* default: error, warning and msg.
-	* quiet: errors and warnings only.
+	* default: msg
+	* quiet: warn
+
+Init
+
+log.SetLevel needs to be called at least once, otherwise no messages will be
+printed as the logger is initiated in off mode.
+
+Colors
 
 If the application is running on a tty (to be honest, if os.Stderr is a tty)
-messages are colored. Otherwise messages are time stamped plain lines of text.
+messages are colored. Otherwise messages are date/time stamped lines of plain
+text.
+
+Debug
+
+When debug level is set, information about source file and line number is added
+to each message.
 */
 package log
 
 import (
 	"os"
+
+	gfmt "fmt"
 
 	"github.com/jrmsdev/gojc/errors"
 	"github.com/jrmsdev/gojc/log/internal/logger"
@@ -122,4 +142,32 @@ func Debug(args ...interface{}) {
 // Debugf prints a formatted debug message.
 func Debugf(fmt string, args ...interface{}) {
 	l.Printf(logger.DEBUG, fmt, args...)
+}
+
+// Fatal prints an error message and calls os.Exit(status).
+func Fatal(status int, args ...interface{}) {
+	msg := gfmt.Sprint(args...)
+	l.Print(logger.FATAL, "[FATAL] ", msg)
+	os.Exit(status)
+}
+
+// Fatalf prints a formatted error message and calls os.Exit(status).
+func Fatalf(status int, fmt string, args ...interface{}) {
+	msg := gfmt.Sprintf(fmt, args...)
+	l.Print(logger.FATAL, "[FATAL] ", msg)
+	os.Exit(status)
+}
+
+// Panic prints an error message and calls panic.
+func Panic(args ...interface{}) {
+	msg := gfmt.Sprint(args...)
+	l.Print(logger.PANIC, "[PANIC] ", msg)
+	panic(msg)
+}
+
+// Panicf prints a formatted error message and calls panic.
+func Panicf(fmt string, args ...interface{}) {
+	msg := gfmt.Sprintf(fmt, args...)
+	l.Print(logger.PANIC, "[PANIC] ", msg)
+	panic(msg)
 }

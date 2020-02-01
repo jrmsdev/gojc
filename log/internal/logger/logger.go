@@ -15,7 +15,9 @@ var ErrInvalidLevel = errors.New("invalid logger level")
 var flagsDefault int = log.Ldate | log.Ltime | log.Lmicroseconds | log.Llongfile
 
 const (
-	OFF = iota
+	PANIC = iota
+	FATAL
+	OFF
 	ERROR
 	WARN
 	MSG
@@ -24,6 +26,8 @@ const (
 )
 
 var levelTag = map[int]string{
+	PANIC: "",
+	FATAL: "",
 	OFF:   "",
 	ERROR: "[E] ",
 	WARN:  "[W] ",
@@ -59,7 +63,7 @@ func print(l *L, lvl int, msg string) {
 }
 
 func (l *L) SetLevel(lvl int) error {
-	if lvl > DEBUG {
+	if lvl < OFF || lvl > DEBUG {
 		return ErrInvalidLevel.Format("%d", lvl)
 	}
 	l.lvl = lvl
@@ -92,6 +96,8 @@ var (
 )
 
 var levelColor = map[int]string{
+	PANIC: red,
+	FATAL: red,
 	OFF:   white,
 	ERROR: red,
 	WARN:  yellow,
