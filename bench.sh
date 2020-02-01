@@ -3,11 +3,9 @@ set -eu
 ARGS=${@}
 if test "X" = "X${ARGS}"; then
 	ARGS='-bench=.'
-	for fn in $(ls ./internal/_bench/*.go); do
-		echo "--- ${fn}"
-		go test -bench=. ${fn}
-	done
-else
-	go test ${ARGS}
 fi
+for fn in $(ls ./internal/_bench/*.go); do
+	echo "--- ${fn}"
+	go test ${ARGS} ${fn}
+done
 exit 0

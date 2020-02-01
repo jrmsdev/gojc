@@ -21,7 +21,7 @@ func benchSetup(b *testing.B) *os.File {
 	return fh
 }
 
-func BenchmarkOff(b *testing.B) {
+func BenchmarkLogOff(b *testing.B) {
 	oldw := golog.Writer()
 	devnull := benchSetup(b)
 	defer func() {
@@ -34,7 +34,7 @@ func BenchmarkOff(b *testing.B) {
 	}
 }
 
-func BenchmarkDebug(b *testing.B) {
+func BenchmarkLogDebug(b *testing.B) {
 	oldw := golog.Writer()
 	devnull := benchSetup(b)
 	defer func() {
