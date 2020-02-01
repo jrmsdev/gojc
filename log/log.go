@@ -4,78 +4,86 @@
 package log
 
 import (
+	"os"
+
+	"github.com/jrmsdev/gojc/errors"
 	"github.com/jrmsdev/gojc/log/internal/logger"
 )
 
-var l *logger.Logger
+var ErrInvalidLevel = errors.New("invalid log level")
 
-func init() {
-	l, _ = logger.New("off")
+var l logger.Logger
+
+var level = map[string]int{
+	"default": logger.MSG,
+	"quiet": logger.WARN,
+	"off": logger.OFF,
+	"error": logger.ERROR,
+	"warn": logger.WARN,
+	"msg": logger.MSG,
+	"info": logger.INFO,
+	"debug": logger.DEBUG,
 }
 
-func SetLevel(level string) error {
-	return l.SetLevel(level)
+func istty(fh *os.File) bool {
+	if st, err := fh.Stat(); err == nil {
+		m := st.Mode()
+		if m&os.ModeDevice != 0 && m&os.ModeCharDevice != 0 {
+			return true
+		}
+	}
+	return false
+}
+
+func init() {
+	colored := istty(os.Stderr)
+	l = logger.New(logger.OFF, colored)
+}
+
+func SetLevel(lvl string) error {
+	if n, ok := level[lvl]; !ok {
+		return ErrInvalidLevel.Format("%s (%d)", lvl, n)
+	} else {
+		return l.SetLevel(n)
+	}
 }
 
 func Error(args ...interface{}) {
-	l.Error(l.Format("error", args...))
+	l.Print(logger.ERROR, args...)
 }
 
-func Errorf(format string, args ...interface{}) {
-	l.Error(l.Formatf("error", format, args...))
+func Errorf(fmt string, args ...interface{}) {
+	l.Printf(logger.ERROR, fmt, args...)
 }
 
 func Warn(args ...interface{}) {
-	l.Warn(l.Format("warn", args...))
+	l.Print(logger.WARN, args...)
 }
 
-func Warnf(format string, args ...interface{}) {
-	l.Warn(l.Formatf("warn", format, args...))
+func Warnf(fmt string, args ...interface{}) {
+	l.Printf(logger.WARN, fmt, args...)
 }
 
 func Print(args ...interface{}) {
-	l.Print(l.Format("msg", args...))
+	l.Print(logger.MSG, args...)
 }
 
-func Printf(format string, args ...interface{}) {
-	l.Print(l.Formatf("msg", format, args...))
+func Printf(fmt string, args ...interface{}) {
+	l.Printf(logger.MSG, fmt, args...)
 }
 
 func Info(args ...interface{}) {
-	l.Info(l.Format("info", args...))
+	l.Print(logger.INFO, args...)
 }
 
-func Infof(format string, args ...interface{}) {
-	l.Info(l.Formatf("info", format, args...))
+func Infof(fmt string, args ...interface{}) {
+	l.Printf(logger.INFO, fmt, args...)
 }
 
 func Debug(args ...interface{}) {
-	l.Debug(l.Format("debug", args...))
+	l.Print(logger.DEBUG, args...)
 }
 
-func Debugf(format string, args ...interface{}) {
-	l.Debug(l.Formatf("debug", format, args...))
-}
-
-func BenchIf(lvl string, args ...interface{}) {
-	if lvl == "error" {
-	} else if lvl == "info" {
-	} else if lvl == "debug" {
-		l.Debug(l.Format("debug", args...))
-	}
-}
-
-func BenchSwitch(lvl string, args ...interface{}) {
-	switch lvl {
-		case "error":
-			l.Error(l.Format("error", args...))
-
-		case "info":
-			l.Info(l.Format("info", args...))
-
-		case "debug":
-			l.Debug(l.Format("debug", args...))
-
-		default:
-	}
+func Debugf(fmt string, args ...interface{}) {
+	l.Printf(logger.DEBUG, fmt, args...)
 }

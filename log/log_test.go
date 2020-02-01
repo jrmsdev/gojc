@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	golog "log"
+	glog "log"
 
 	"github.com/jrmsdev/gojc/log"
 
@@ -30,9 +30,9 @@ func check(t *testing.T, match string) {
 }
 
 func TestLog(t *testing.T) {
-	oldw := golog.Writer()
-	golog.SetOutput(buf)
-	defer golog.SetOutput(oldw)
+	oldw := glog.Writer()
+	glog.SetOutput(buf)
+	defer glog.SetOutput(oldw)
 
 	log.Print("t0")
 	check(t, "")
