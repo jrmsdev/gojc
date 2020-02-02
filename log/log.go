@@ -144,20 +144,6 @@ func Debugf(fmt string, args ...interface{}) {
 	l.Printf(logger.DEBUG, fmt, args...)
 }
 
-// Fatal prints an error message and calls os.Exit(status).
-func Fatal(status int, args ...interface{}) {
-	msg := gfmt.Sprint(args...)
-	l.Print(logger.FATAL, "[FATAL] ", msg)
-	os.Exit(status)
-}
-
-// Fatalf prints a formatted error message and calls os.Exit(status).
-func Fatalf(status int, fmt string, args ...interface{}) {
-	msg := gfmt.Sprintf(fmt, args...)
-	l.Print(logger.FATAL, "[FATAL] ", msg)
-	os.Exit(status)
-}
-
 // Panic prints an error message and calls panic.
 func Panic(args ...interface{}) {
 	msg := gfmt.Sprint(args...)
@@ -170,4 +156,27 @@ func Panicf(fmt string, args ...interface{}) {
 	msg := gfmt.Sprintf(fmt, args...)
 	l.Print(logger.PANIC, "[PANIC] ", msg)
 	panic(msg)
+}
+
+// mockable os.Exit for testing purposes
+
+type osExit func(status int)
+var exit osExit
+
+func init() {
+	exit = os.Exit
+}
+
+// Fatal prints an error message and calls os.Exit(status).
+func Fatal(status int, args ...interface{}) {
+	msg := gfmt.Sprint(args...)
+	l.Print(logger.FATAL, "[FATAL] ", msg)
+	exit(status)
+}
+
+// Fatalf prints a formatted error message and calls os.Exit(status).
+func Fatalf(status int, fmt string, args ...interface{}) {
+	msg := gfmt.Sprintf(fmt, args...)
+	l.Print(logger.FATAL, "[FATAL] ", msg)
+	exit(status)
 }
