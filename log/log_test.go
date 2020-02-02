@@ -86,3 +86,33 @@ func TestInitFail(t *testing.T) {
 		t.Error("no error")
 	}
 }
+
+func TestPanic(t *testing.T) {
+	oldw := glog.Writer()
+	glog.SetOutput(buf)
+	defer glog.SetOutput(oldw)
+	defer func() {
+		if err := recover(); err != nil {
+			check(t, `: \[PANIC] testing`)
+			IsEqual(t, err, "testing", "error message")
+		} else {
+			t.Error("panic was not called")
+		}
+	}()
+	log.Panic("testing")
+}
+
+func TestPanicf(t *testing.T) {
+	oldw := glog.Writer()
+	glog.SetOutput(buf)
+	defer glog.SetOutput(oldw)
+	defer func() {
+		if err := recover(); err != nil {
+			check(t, `: \[PANIC] testing`)
+			IsEqual(t, err, "testing", "error message")
+		} else {
+			t.Error("panic was not called")
+		}
+	}()
+	log.Panicf("testing")
+}
