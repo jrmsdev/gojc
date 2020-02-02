@@ -15,9 +15,6 @@ e.Format, can be compared later using the e.Is method. Check the examples.
 package errors
 
 import (
-	"crypto/sha256"
-	"time"
-
 	gfmt "fmt"
 )
 
@@ -29,21 +26,19 @@ type Error interface {
 
 // E implements the Error interface.
 type E struct {
-	id   [sha256.Size]byte
+	id   string
 	name string
 	msg  string
 }
 
 // New creates a new instance of E.
-// Assigns a name to the error instance and generates its unique identifier,
-// using an sha256 hash from the time of instance's creation plus its name.
+// Assigns a name to the error instance and generates its unique identifier.
 func New(name string) *E {
-	id := gfmt.Sprintf("%s %s", time.Now().String(), name)
-	return &E{
-		sha256.Sum256([]byte(id)),
-		name,
-		"",
-	}
+	e := new(E)
+	e.id = gfmt.Sprintf("%p:%q", e, name)
+	e.name = name
+	e.msg = ""
+	return e
 }
 
 // Error returns the error's message string, as required by the error interface.
@@ -69,7 +64,11 @@ func (e *E) Error() string {
 //		}
 //	}
 func (e *E) Format(fmt string, args ...interface{}) error {
-	return &E{e.id, e.name, gfmt.Sprintf(fmt, args...)}
+	err := new(E)
+	err.id = e.id
+	err.name = e.name
+	err.msg = gfmt.Sprintf(fmt, args...)
+	return err
 }
 
 // Is, shorcut method to call errors.Is(e, err).

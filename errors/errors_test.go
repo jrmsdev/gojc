@@ -12,11 +12,13 @@ import (
 )
 
 func TestError(t *testing.T) {
+	e0 := New("testing")
+	e1 := New("testing")
+	NotEqual(t, e0.id, e1.id, "same e.id")
 	e := New("testing")
-	NotNil(t, e.id, "e.id")
+	NotEqual(t, e.id, "", "empty e.id")
 	IsEqual(t, e.name, "testing", "e.name")
 	IsEqual(t, e.msg, "", "e.msg")
-	IsEqual(t, e, e, "e")
 	x := New("testing")
 	NotEqual(t, x, e, "x")
 	IsEqual(t, x.Error(), "testing", "x.Error")
