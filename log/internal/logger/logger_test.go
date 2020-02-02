@@ -6,12 +6,8 @@ package logger
 import (
 	"bytes"
 	"log"
-	"testing"
 	"strings"
-
-	//~ gfmt "fmt"
-
-	//~ "github.com/jrmsdev/gojc/errors"
+	"testing"
 
 	. "github.com/jrmsdev/gojc/testing/check"
 )
@@ -37,9 +33,7 @@ func TestLogger(t *testing.T) {
 	New(OFF, false)
 	IsEqual(t, log.Flags(), flagsDefault, "default log flags")
 	IsEqual(t, levelTag[PANIC], "", "tag")
-	IsEqual(t, levelColor[PANIC], red, "color")
 	IsEqual(t, levelTag[FATAL], "", "tag")
-	IsEqual(t, levelColor[FATAL], red, "color")
 }
 
 func TestLoggerOFF(t *testing.T) {
@@ -47,7 +41,6 @@ func TestLoggerOFF(t *testing.T) {
 	log.SetOutput(buf)
 	defer log.SetOutput(oldw)
 	IsEqual(t, levelTag[OFF], "", "tag")
-	IsEqual(t, levelColor[OFF], white, "color")
 	l := New(OFF, false)
 	l.Print(MSG, "testing")
 	check(t, "")
@@ -60,7 +53,6 @@ func TestLoggerERROR(t *testing.T) {
 	log.SetOutput(buf)
 	defer log.SetOutput(oldw)
 	IsEqual(t, levelTag[ERROR], "[E] ", "tag")
-	IsEqual(t, levelColor[ERROR], red, "color")
 	l := New(ERROR, false)
 	l.Print(PANIC, "testing")
 	check(t, `: testing`)
@@ -83,7 +75,6 @@ func TestLoggerWARN(t *testing.T) {
 	log.SetOutput(buf)
 	defer log.SetOutput(oldw)
 	IsEqual(t, levelTag[WARN], "[W] ", "tag")
-	IsEqual(t, levelColor[WARN], yellow, "color")
 	l := New(WARN, false)
 	l.Print(PANIC, "testing")
 	check(t, `: testing`)
@@ -106,7 +97,6 @@ func TestLoggerMSG(t *testing.T) {
 	log.SetOutput(buf)
 	defer log.SetOutput(oldw)
 	IsEqual(t, levelTag[MSG], "", "tag")
-	IsEqual(t, levelColor[MSG], white, "color")
 	l := New(MSG, false)
 	l.Print(PANIC, "testing")
 	check(t, `: testing`)
@@ -129,7 +119,6 @@ func TestLoggerINFO(t *testing.T) {
 	log.SetOutput(buf)
 	defer log.SetOutput(oldw)
 	IsEqual(t, levelTag[INFO], "[I] ", "tag")
-	IsEqual(t, levelColor[INFO], cyan, "color")
 	l := New(INFO, false)
 	l.Print(PANIC, "testing")
 	check(t, `: testing`)
@@ -152,7 +141,6 @@ func TestLoggerDEBUG(t *testing.T) {
 	log.SetOutput(buf)
 	defer log.SetOutput(oldw)
 	IsEqual(t, levelTag[DEBUG], "[D] ", "tag")
-	IsEqual(t, levelColor[DEBUG], green, "color")
 	l := New(DEBUG, false)
 	l.Print(PANIC, "testing")
 	check(t, `: testing`)
@@ -170,7 +158,7 @@ func TestLoggerDEBUG(t *testing.T) {
 	check(t, `: \[D] testing`)
 }
 
-func TestLoggerSetLevel(t * testing.T) {
+func TestLoggerSetLevel(t *testing.T) {
 	l := New(OFF, false).(*L)
 	IsEqual(t, l.lvl, OFF, "off level")
 	l.SetLevel(DEBUG)

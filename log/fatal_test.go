@@ -28,6 +28,7 @@ func check(t *testing.T, match string) {
 }
 
 var exitStatus int
+
 func mockExit(status int) {
 	exitStatus = status
 }
