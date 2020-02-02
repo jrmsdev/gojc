@@ -36,9 +36,9 @@ func TestFatal(t *testing.T) {
 	oldw := glog.Writer()
 	glog.SetOutput(buf)
 	defer glog.SetOutput(oldw)
-	oldx := exit
-	exit = mockExit
-	defer func() { exit = oldx }()
+	oldx := osExit
+	osExit = mockExit
+	defer func() { osExit = oldx }()
 	exitStatus = 0
 	Fatal(9, "testing")
 	check(t, `: \[FATAL] testing`)
@@ -49,9 +49,9 @@ func TestFatalf(t *testing.T) {
 	oldw := glog.Writer()
 	glog.SetOutput(buf)
 	defer glog.SetOutput(oldw)
-	oldx := exit
-	exit = mockExit
-	defer func() { exit = oldx }()
+	oldx := osExit
+	osExit = mockExit
+	defer func() { osExit = oldx }()
 	exitStatus = 0
 	Fatalf(8, "testing")
 	check(t, `: \[FATAL] testing`)
