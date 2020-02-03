@@ -119,8 +119,21 @@ func BenchmarkLogColors(b *testing.B) {
 		devnull.Close()
 		golog.SetOutput(oldw)
 	}()
+	log.SetLevel("msg")
+	for i := 0; i < b.N; i++ {
+		log.Printf("%d", i)
+	}
+}
+
+func BenchmarkLogColorsDebug(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
 	log.SetLevel("debug")
 	for i := 0; i < b.N; i++ {
-		log.Debugf("%d", i)
+		log.Printf("%d", i)
 	}
 }
