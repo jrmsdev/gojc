@@ -42,7 +42,7 @@ func TestFatal(t *testing.T) {
 	defer func() { osExit = oldx }()
 	exitStatus = 0
 	Fatal(9, "testing")
-	check(t, `: \[FATAL] testing`)
+	check(t, ` \[FATAL] testing$`)
 	x.IsEqual(t, exitStatus, 9, "exit status")
 }
 
@@ -55,6 +55,6 @@ func TestFatalf(t *testing.T) {
 	defer func() { osExit = oldx }()
 	exitStatus = 0
 	Fatalf(8, "testing")
-	check(t, `: \[FATAL] testing`)
+	check(t, ` \[FATAL] testing$`)
 	x.IsEqual(t, exitStatus, 8, "exit status")
 }

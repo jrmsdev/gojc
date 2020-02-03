@@ -31,4 +31,5 @@ func (l *L) Colors() bool {
 
 func (l *L) SetColors(enable bool) {
 	l.colored = enable
+	l.SetLevel(l.lvl)
 }

@@ -93,7 +93,7 @@ func TestPanic(t *testing.T) {
 	defer glog.SetOutput(oldw)
 	defer func() {
 		if err := recover(); err != nil {
-			check(t, `: \[PANIC] testing`)
+			check(t, ` \[PANIC] testing$`)
 			IsEqual(t, err, "testing", "error message")
 		} else {
 			t.Error("panic was not called")
@@ -108,7 +108,7 @@ func TestPanicf(t *testing.T) {
 	defer glog.SetOutput(oldw)
 	defer func() {
 		if err := recover(); err != nil {
-			check(t, `: \[PANIC] testing`)
+			check(t, ` \[PANIC] testing$`)
 			IsEqual(t, err, "testing", "error message")
 		} else {
 			t.Error("panic was not called")
