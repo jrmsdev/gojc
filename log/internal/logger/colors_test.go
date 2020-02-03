@@ -34,7 +34,7 @@ func TestLoggerColors(t *testing.T) {
 	IsEqual(t, levelColor[MSG], white, "msg color")
 	IsEqual(t, levelColor[INFO], cyan, "info color")
 	IsEqual(t, levelColor[DEBUG], green, "debug color")
-	l := New(MSG, true).(*L)
+	l := New(MSG, true)
 	IsTrue(t, l.Colors(), "colors")
 	l.Print(MSG, "testing")
 	checkColor(t, "MSG", levelColor[MSG])

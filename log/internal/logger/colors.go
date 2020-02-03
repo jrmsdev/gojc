@@ -25,11 +25,11 @@ var levelColor = map[int]string{
 	DEBUG: green,
 }
 
-func (l *L) Colors() bool {
+func (l *Logger) Colors() bool {
 	return l.colored
 }
 
-func (l *L) SetColors(enable bool) {
+func (l *Logger) SetColors(enable bool) {
 	l.colored = enable
 	l.SetLevel(l.lvl)
 }

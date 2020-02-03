@@ -39,26 +39,18 @@ var levelTag = map[int]string{
 	DEBUG: "[D] ",
 }
 
-type Logger interface {
-	SetLevel(lvl int) error
-	Colors() bool
-	SetColors(enable bool)
-	Print(lvl int, args ...interface{})
-	Printf(lvl int, fmt string, args ...interface{})
-}
-
-type L struct {
+type Logger struct {
 	depth   int
 	lvl     int
 	colored bool
 }
 
-func New(lvl int, colored bool) Logger {
+func New(lvl int, colored bool) *Logger {
 	log.SetFlags(flagsDefault)
-	return &L{3, lvl, colored}
+	return &Logger{3, lvl, colored}
 }
 
-func (l *L) SetLevel(lvl int) error {
+func (l *Logger) SetLevel(lvl int) error {
 	if lvl < OFF || lvl > DEBUG {
 		return ErrInvalidLevel.Format("%d", lvl)
 	}
@@ -73,7 +65,7 @@ func (l *L) SetLevel(lvl int) error {
 	return nil
 }
 
-func (l *L) Print(lvl int, args ...interface{}) {
+func (l *Logger) Print(lvl int, args ...interface{}) {
 	if lvl <= l.lvl {
 		msg := gfmt.Sprint(args...)
 		if l.colored {
@@ -86,7 +78,7 @@ func (l *L) Print(lvl int, args ...interface{}) {
 	}
 }
 
-func (l *L) Printf(lvl int, fmt string, args ...interface{}) {
+func (l *Logger) Printf(lvl int, fmt string, args ...interface{}) {
 	if lvl <= l.lvl {
 		msg := gfmt.Sprintf(fmt, args...)
 		if l.colored {

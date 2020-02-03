@@ -30,7 +30,7 @@ func check(t *testing.T, match string) {
 }
 
 func TestLogger(t *testing.T) {
-	l := New(OFF, false).(*L)
+	l := New(OFF, false)
 	IsFalse(t, l.colored, "l.colored")
 	IsEqual(t, levelTag[PANIC], "", "tag")
 	IsEqual(t, levelTag[FATAL], "", "tag")
@@ -159,7 +159,7 @@ func TestLoggerDEBUG(t *testing.T) {
 }
 
 func TestLoggerSetLevel(t *testing.T) {
-	l := New(OFF, false).(*L)
+	l := New(OFF, false)
 	IsEqual(t, l.lvl, OFF, "off level")
 	l.SetLevel(DEBUG)
 	IsEqual(t, l.lvl, DEBUG, "debug level")

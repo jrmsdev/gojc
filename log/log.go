@@ -57,7 +57,7 @@ import (
 // ErrInvalidLevel is returned by SetLevel if an invalid level name is provided.
 var ErrInvalidLevel = errors.New("invalid log level")
 
-var l logger.Logger
+var l *logger.Logger
 
 var level = map[string]int{
 	"default": logger.MSG,
