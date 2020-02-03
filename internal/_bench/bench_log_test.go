@@ -34,7 +34,85 @@ func BenchmarkLogOff(b *testing.B) {
 	}
 }
 
+func BenchmarkLogError(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log.Init()
+	for i := 0; i < b.N; i++ {
+		log.Errorf("%d", i)
+	}
+}
+
+func BenchmarkLogWarn(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log.SetLevel("warn")
+	for i := 0; i < b.N; i++ {
+		log.Warnf("%d", i)
+	}
+}
+
+func BenchmarkLogPrint(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log.Init()
+	for i := 0; i < b.N; i++ {
+		log.Printf("%d", i)
+	}
+}
+
+func BenchmarkLogInfo(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log.SetLevel("info")
+	for i := 0; i < b.N; i++ {
+		log.Infof("%d", i)
+	}
+}
+
+func BenchmarkLogInfoPrint(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log.SetLevel("info")
+	for i := 0; i < b.N; i++ {
+		log.Printf("%d", i)
+	}
+}
+
 func BenchmarkLogDebug(b *testing.B) {
+	oldw := golog.Writer()
+	devnull := benchSetup(b)
+	defer func() {
+		devnull.Close()
+		golog.SetOutput(oldw)
+	}()
+	log.SetLevel("debug")
+	for i := 0; i < b.N; i++ {
+		log.Debugf("%d", i)
+	}
+}
+
+func BenchmarkLogColors(b *testing.B) {
 	oldw := golog.Writer()
 	devnull := benchSetup(b)
 	defer func() {

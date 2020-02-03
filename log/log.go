@@ -29,8 +29,8 @@ levels of messages can be set.
 
 Init
 
-log.SetLevel needs to be called at least once, otherwise no messages will be
-printed as the logger is initiated in off mode.
+log.Init or log.SetLevel must be called at least once, otherwise no messages
+will be printed as the logger is initiated in off mode.
 
 Colors
 
@@ -85,6 +85,11 @@ func init() {
 	l = logger.New(logger.OFF, colored)
 }
 
+// Init sets the logger to the default level of messages.
+func Init() {
+	l.SetLevel(logger.MSG)
+}
+
 // SetLevel sets the logger level of messages.
 func SetLevel(lvl string) error {
 	if n, ok := level[lvl]; !ok {
@@ -92,6 +97,16 @@ func SetLevel(lvl string) error {
 	} else {
 		return l.SetLevel(n)
 	}
+}
+
+// Colors reports if colors are enabled or not.
+func Colors() bool {
+	return l.Colors()
+}
+
+// SetColors enables or disables colored messages.
+func SetColors(enable bool) {
+	l.SetColors(enable)
 }
 
 // Error prints an error messages.
