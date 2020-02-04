@@ -9,8 +9,8 @@ import (
 	"github.com/jrmsdev/gojc/config"
 )
 
-var bcfg = &config.Cfg{
-	"default": &config.Section{
+var bcfg = config.Cfg{
+	"default": config.Option{
 		"testing": "ok",
 	},
 }

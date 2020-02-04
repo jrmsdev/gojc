@@ -15,7 +15,7 @@ var ErrSection = errors.New("section not found")
 type Cfg map[string]Option
 
 type Config struct {
-	sec Cfg
+	sect Cfg
 }
 
 // Read parses filename content and returns a new config instance. Or an error,
@@ -47,7 +47,7 @@ func Map(src Cfg) *Config {
 
 // Section returns a pointer to the named section. Panics if section not found.
 func (c *Config) Section(name string) *Section {
-	s, found := c.sec[name]
+	s, found := c.sect[name]
 	if !found {
 		panic(ErrSection.Format("%s", name))
 	}
@@ -56,7 +56,7 @@ func (c *Config) Section(name string) *Section {
 
 // HasSection checks if section name exists.
 func (c *Config) HasSection(name string) bool {
-	_, found := c.sec[name]
+	_, found := c.sect[name]
 	return found
 }
 
