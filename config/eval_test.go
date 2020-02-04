@@ -28,4 +28,6 @@ func TestConfigEval(t *testing.T) {
 	IsEqual(t, c.Eval("default", "\t"), "\t", "tab expression")
 
 	IsEqual(t, c.Eval("default", "${testing}"), "ok", "expand")
+
+	IsEqual(t, c.Eval("default", "${default:testing}:${testing}"), "ok:ok", "expand section")
 }
