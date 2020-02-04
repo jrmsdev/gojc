@@ -42,8 +42,22 @@ func ReadFile(file io.Reader) (*Config, error) {
 }
 
 // Map creates a new config with src as it initial content.
+// Panics if there's any error, like empty section names and such.
 func Map(src Cfg) *Config {
-	return &Config{src}
+	dst := make(Cfg)
+	for sn, s := range src {
+		if sn == "" {
+			panic(ErrEmptySection)
+		}
+		dst[sn] = make(Option)
+		for on, o := range s {
+			if on == "" {
+				panic(ErrEmptyOption.Format(sn))
+			}
+			dst[sn][on] = o
+		}
+	}
+	return &Config{dst}
 }
 
 // HasSection checks if section name exists.

@@ -16,6 +16,12 @@ var bcfg = config.Cfg{
 	},
 }
 
+func BenchmarkConfigMap(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		config.Map(bcfg)
+	}
+}
+
 func BenchmarkConfigGetRaw(b *testing.B) {
 	c := config.Map(bcfg)
 	for i := 0; i < b.N; i++ {

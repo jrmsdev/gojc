@@ -9,6 +9,7 @@ import (
 
 var ErrOption = errors.New("section: %s - option not found: %s")
 var ErrOptionSet = errors.New("section: %s - option is already set: %s")
+var ErrEmptyOption = errors.New("section: %s - empty option name")
 
 type Option map[string]string
 
