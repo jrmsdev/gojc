@@ -18,7 +18,8 @@ type Section struct {
 
 // HasOption returns true if the named option exists in this Sectionion.
 func (s *Section) HasOption(name string) bool {
-	return false
+	_, found := s.opt[name]
+	return found
 }
 
 // GetRaw returns the raw string value of option from this Sectionion.

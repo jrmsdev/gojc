@@ -60,6 +60,11 @@ func (c *Config) HasSection(name string) bool {
 	return found
 }
 
+// HasOption checks if option exists in named section.
+func (c *Config) HasOption(section, name string) bool {
+	return c.Section(section).HasOption(name)
+}
+
 // GetRaw returns the raw string value of section's option.
 // Panics if section or option are not found or if any parsing error.
 func (c *Config) GetRaw(section, option string) string {
