@@ -18,9 +18,9 @@ import (
 	gfmt "fmt"
 )
 
-// Error interface.
+// Error interface around the standard error interface.
 type Error interface {
-	Error() string
+	error
 	Format(fmt string, args ...interface{}) error
 }
 
