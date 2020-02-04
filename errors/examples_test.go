@@ -11,10 +11,10 @@ import (
 
 func ExampleError() {
 	// An E struct's instance is created.
-	var ErrExample = errors.New("example")
+	var ErrExample = errors.New("example %d")
 
 	// Format returns an error interface implementation.
-	err := ErrExample.Format("%d", 1)
+	err := ErrExample.Format(1)
 
 	// Check if err `is an` ErrExample error.
 	fmt.Println(ErrExample.Is(err))
@@ -31,11 +31,11 @@ func ExampleError() {
 	// That's useful in example when you have a base error but you need to
 	// generate a different error message with runtime information from the
 	// moment when the error happened.
-	flag := "error"
-	if flag == "ok" {
+	flag := 1
+	if flag == 1 {
 		fmt.Println("ok")
 	} else {
-		err := ErrExample.Format("%s", flag)
+		err := ErrExample.Format(flag)
 		fmt.Println(err)
 
 		// And later in your code you can check what the err means and do
@@ -49,10 +49,9 @@ func ExampleError() {
 
 	// Output:
 	// true
-	// example: 1
-	// example
-	// example: error
-	// found
+	// example 1
+	// example %d
+	// ok
 }
 
 func ExampleIs() {
@@ -71,10 +70,10 @@ func ExampleIs() {
 
 func Example_format() {
 	// An E struct's instance is created.
-	var ErrExample = errors.New("example")
+	var ErrExample = errors.New("example: %d")
 
 	// Format returns an error interface implementation.
-	err := ErrExample.Format("%d", 1)
+	err := ErrExample.Format(1)
 
 	// Check if err `is an` ErrExample error.
 	fmt.Println(err)

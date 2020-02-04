@@ -17,19 +17,19 @@ func TestError(t *testing.T) {
 	NotEqual(t, e0.id, e1.id, "same e.id")
 	e := New("testing")
 	NotEqual(t, e.id, "", "empty e.id")
-	IsEqual(t, e.name, "testing", "e.name")
-	IsEqual(t, e.msg, "", "e.msg")
+	IsEqual(t, e.msg, "testing", "e.msg")
+	IsEqual(t, e.fmt, "", "e.fmt")
 	x := New("testing")
 	NotEqual(t, x, e, "x")
 	IsEqual(t, x.Error(), "testing", "x.Error")
 }
 
 func TestFormat(t *testing.T) {
-	e := New("t0")
-	IsEqual(t, e.Error(), "t0", "e.Error")
-	r := e.Format("%s", "t1")
-	IsEqual(t, e.Error(), "t0", "e.Error")
-	IsEqual(t, r.Error(), "t0: t1", "r.Error")
+	e := New("t0 %s")
+	IsEqual(t, e.Error(), "t0 %s", "e.Error")
+	r := e.Format("t1")
+	IsEqual(t, e.Error(), "t0 %s", "e.Error")
+	IsEqual(t, r.Error(), "t0 t1", "r.Error")
 }
 
 func TestIsError(t *testing.T) {

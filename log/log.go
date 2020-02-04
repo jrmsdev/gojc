@@ -55,7 +55,7 @@ import (
 )
 
 // ErrInvalidLevel is returned by SetLevel if an invalid level name is provided.
-var ErrInvalidLevel = errors.New("invalid log level")
+var ErrInvalidLevel = errors.New("invalid log level: %s (%d)")
 
 var l *logger.Logger
 
@@ -93,7 +93,7 @@ func Init() {
 // SetLevel sets the logger level of messages.
 func SetLevel(lvl string) error {
 	if n, ok := level[lvl]; !ok {
-		return ErrInvalidLevel.Format("%s (%d)", lvl, n)
+		return ErrInvalidLevel.Format(lvl, n)
 	} else {
 		return l.SetLevel(n)
 	}

@@ -7,8 +7,8 @@ import (
 	"github.com/jrmsdev/gojc/errors"
 )
 
-var ErrOption = errors.New("section option not found")
-var ErrOptionSet = errors.New("section option is set already")
+var ErrOption = errors.New("section: %s - option not found: %s")
+var ErrOptionSet = errors.New("section: %s - option is already set: %s")
 
 type Option map[string]string
 
@@ -28,7 +28,7 @@ func (s *Section) HasOption(name string) bool {
 func (s *Section) GetRaw(option string) string {
 	val, found := s.opt[option]
 	if !found {
-		panic(ErrOption.Format("%s: %s", s.name, option))
+		panic(ErrOption.Format(s.name, option))
 	}
 	return val
 }
@@ -37,7 +37,7 @@ func (s *Section) GetRaw(option string) string {
 func (s *Section) Set(option, value string) {
 	_, found := s.opt[option]
 	if found {
-		panic(ErrOptionSet.Format("%s: %s", s.name, option))
+		panic(ErrOptionSet.Format(s.name, option))
 	} else {
 		s.opt[option] = value
 	}

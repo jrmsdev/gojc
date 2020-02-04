@@ -15,38 +15,37 @@ e.Format, can be compared later using the e.Is method. Check the examples.
 package errors
 
 import (
-	gfmt "fmt"
+	"fmt"
 )
 
 // Error interface around the standard error interface.
 type Error interface {
 	error
-	Format(fmt string, args ...interface{}) error
+	Format(args ...interface{}) error
 }
 
 // E implements the Error interface.
 type E struct {
-	id   string
-	name string
-	msg  string
+	id  string
+	msg string
+	fmt string
 }
 
-// New creates a new instance of E.
-// Assigns a name to the error instance and generates its unique identifier.
-func New(name string) *E {
+// New creates a new instance of E and generates its unique identifier.
+func New(msg string) *E {
 	e := new(E)
-	e.id = gfmt.Sprintf("%p:%q", e, name)
-	e.name = name
-	e.msg = ""
+	e.id = fmt.Sprintf("%p:%q", e, msg)
+	e.msg = msg
+	e.fmt = ""
 	return e
 }
 
 // Error returns the error's message string, as required by the error interface.
 func (e *E) Error() string {
-	if e.msg != "" {
-		return gfmt.Sprintf("%s: %s", e.name, e.msg)
+	if e.fmt != "" {
+		return e.fmt
 	}
-	return e.name
+	return e.msg
 }
 
 // Format creates a new instance of E with the same identity but with a new
@@ -63,12 +62,8 @@ func (e *E) Error() string {
 //			return ErrExample.Format("%s", err)
 //		}
 //	}
-func (e *E) Format(fmt string, args ...interface{}) error {
-	err := new(E)
-	err.id = e.id
-	err.name = e.name
-	err.msg = gfmt.Sprintf(fmt, args...)
-	return err
+func (e *E) Format(args ...interface{}) error {
+	return &E{e.id, e.msg, fmt.Sprintf(e.msg, args...)}
 }
 
 // Is, shorcut method to call errors.Is(e, err).

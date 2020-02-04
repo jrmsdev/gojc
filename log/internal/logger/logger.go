@@ -11,7 +11,7 @@ import (
 	"github.com/jrmsdev/gojc/errors"
 )
 
-var ErrInvalidLevel = errors.New("invalid logger level")
+var ErrInvalidLevel = errors.New("invalid logger level: %d")
 
 var flagsDebug int = log.Ldate | log.Ltime | log.Lmicroseconds | log.Llongfile
 var flagsDefault int = log.Ldate | log.Ltime | log.Lmicroseconds
@@ -52,7 +52,7 @@ func New(lvl int, colored bool) *Logger {
 
 func (l *Logger) SetLevel(lvl int) error {
 	if lvl < OFF || lvl > DEBUG {
-		return ErrInvalidLevel.Format("%d", lvl)
+		return ErrInvalidLevel.Format(lvl)
 	}
 	l.lvl = lvl
 	if l.lvl == DEBUG {

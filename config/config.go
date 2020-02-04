@@ -10,7 +10,8 @@ import (
 	"github.com/jrmsdev/gojc/errors"
 )
 
-var ErrSection = errors.New("section not found")
+var ErrSection = errors.New("section not found: %s")
+var ErrEmptySection = errors.New("empty section name")
 
 type Cfg map[string]Option
 
@@ -55,7 +56,7 @@ func (c *Config) HasSection(name string) bool {
 func (c *Config) Section(name string) *Section {
 	s, found := c.sect[name]
 	if !found {
-		panic(ErrSection.Format("%s", name))
+		panic(ErrSection.Format(name))
 	}
 	return &Section{name, s}
 }
