@@ -17,13 +17,13 @@ type Section struct {
 	opt Option
 }
 
-// HasOption returns true if the named option exists in this Sectionion.
+// HasOption checks if the named option exists in this section.
 func (s *Section) HasOption(name string) bool {
 	_, found := s.opt[name]
 	return found
 }
 
-// GetRaw returns the raw string value of option from this Sectionion.
+// GetRaw returns the raw value of option from this section.
 // Panics if option is not found.
 func (s *Section) GetRaw(option string) string {
 	val, found := s.opt[option]
@@ -44,7 +44,8 @@ func (s *Section) Set(option, value string) {
 }
 
 // Update updates option's value in this section.
-// It is ok if the option already exists.
+// If the option already exists, its value will be replaced. It will be created
+// otherwise.
 func (s *Section) Update(option, value string) {
 	s.opt[option] = value
 }
