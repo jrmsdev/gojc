@@ -4,6 +4,7 @@
 package bench
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/jrmsdev/gojc/config"
@@ -12,7 +13,7 @@ import (
 var bcfg = config.Cfg{
 	"default": config.Option{
 		"testing": "ok",
-		"eval": "${testing}",
+		"eval":    "${testing}",
 	},
 }
 
@@ -40,5 +41,20 @@ func BenchmarkConfigGet(b *testing.B) {
 	c := config.Map(bcfg)
 	for i := 0; i < b.N; i++ {
 		c.Get("default", "eval")
+	}
+}
+
+func BenchmarkConfigSet(b *testing.B) {
+	c := config.Map(bcfg)
+	for i := 0; i < b.N; i++ {
+		c.Set("default", strconv.Itoa(i), "x")
+	}
+}
+
+func BenchmarkConfigUpdate(b *testing.B) {
+	c := config.Map(bcfg)
+	c.Set("default", "x", "")
+	for i := 0; i < b.N; i++ {
+		c.Update("default", "x", strconv.Itoa(i))
 	}
 }

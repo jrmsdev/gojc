@@ -30,7 +30,7 @@ func (c *Config) evalSectionOption(section string) func(string) string {
 	return func(s string) string {
 		opt := ""
 		sect := section
-		s = s[2:len(s)-1]
+		s = s[2 : len(s)-1]
 		idx := strings.Index(s, ":")
 		if idx > 0 {
 			sect = s[0:idx]

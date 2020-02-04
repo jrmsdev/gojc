@@ -15,7 +15,7 @@ type Option map[string]string
 
 type Section struct {
 	name string
-	opt Option
+	opt  Option
 }
 
 // HasOption checks if the named option exists in this section.
