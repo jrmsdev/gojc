@@ -62,6 +62,9 @@ func (c *Config) Section(name string) *Section {
 
 // HasOption checks if option exists in named section.
 func (c *Config) HasOption(section, option string) bool {
+	if !c.HasSection(section) {
+		return false
+	}
 	return c.Section(section).HasOption(option)
 }
 
