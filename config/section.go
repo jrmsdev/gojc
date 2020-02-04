@@ -7,9 +7,9 @@ import (
 	"github.com/jrmsdev/gojc/errors"
 )
 
-var ErrOption = errors.New("section: %s - option not found: %s")
-var ErrOptionSet = errors.New("section: %s - option is already set: %s")
-var ErrEmptyOption = errors.New("section: %s - empty option name")
+var ErrOption = errors.New("config section '%s' option '%s': not found")
+var ErrOptionSet = errors.New("config section '%s' option '%s': already set")
+var ErrEmptyOption = errors.New("config section '%s': empty option name")
 
 type Option map[string]string
 
@@ -24,18 +24,11 @@ func (s *Section) HasOption(name string) bool {
 	return found
 }
 
-// GetRaw returns the raw value of option from this section.
-// Panics if option is not found.
-func (s *Section) GetRaw(option string) string {
-	val, found := s.opt[option]
-	if !found {
-		panic(ErrOption.Format(s.name, option))
-	}
-	return val
-}
-
 // Set sets option's value in this section. Panics if option already exists.
 func (s *Section) Set(option, value string) {
+	if option == "" {
+		panic(ErrEmptyOption.Format(s.name))
+	}
 	_, found := s.opt[option]
 	if found {
 		panic(ErrOptionSet.Format(s.name, option))
@@ -47,6 +40,20 @@ func (s *Section) Set(option, value string) {
 // Update updates option's value in this section.
 // If the option already exists, its value will be replaced. It will be created
 // otherwise.
+// Panics if option name is an empty string.
 func (s *Section) Update(option, value string) {
+	if option == "" {
+		panic(ErrEmptyOption.Format(s.name))
+	}
 	s.opt[option] = value
+}
+
+// GetRaw returns the raw value of option from this section.
+// Panics if option is not found.
+func (s *Section) GetRaw(option string) string {
+	val, found := s.opt[option]
+	if !found {
+		panic(ErrOption.Format(s.name, option))
+	}
+	return val
 }

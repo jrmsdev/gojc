@@ -10,8 +10,8 @@ import (
 	"github.com/jrmsdev/gojc/errors"
 )
 
-var ErrSection = errors.New("section not found: %s")
-var ErrEmptySection = errors.New("empty section name")
+var ErrSection = errors.New("config section not found: %s")
+var ErrEmptySection = errors.New("config section empty name")
 
 type Cfg map[string]Option
 
@@ -83,15 +83,12 @@ func (c *Config) HasOption(section, option string) bool {
 	return c.Section(section).HasOption(option)
 }
 
-// GetRaw returns the raw string value of section's option.
-// Panics if section or option are not found.
-func (c *Config) GetRaw(section, option string) string {
-	return c.Section(section).GetRaw(option)
-}
-
 // Set sets option's value in section. If section does not exists it is created.
 // Panics if option already exists.
 func (c *Config) Set(section, option, value string) {
+	if section == "" {
+		panic(ErrEmptySection)
+	}
 	if !c.HasSection(section) {
 		c.sect[section] = make(Option)
 	}
@@ -101,10 +98,19 @@ func (c *Config) Set(section, option, value string) {
 // Update updates option's value in section. If section does not exists it is
 // created. It is ok if the option already exists.
 func (c *Config) Update(section, option, value string) {
+	if section == "" {
+		panic(ErrEmptySection)
+	}
 	if !c.HasSection(section) {
 		c.sect[section] = make(Option)
 	}
 	c.Section(section).Update(option, value)
+}
+
+// GetRaw returns the raw string value of section's option.
+// Panics if section or option are not found.
+func (c *Config) GetRaw(section, option string) string {
+	return c.Section(section).GetRaw(option)
 }
 
 // Get returns expanded value of section's option.
