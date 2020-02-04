@@ -49,3 +49,20 @@ func TestConfig(t *testing.T) {
 	IsTrue(t, c.HasOption("default", "testing"), "default option")
 	IsFalse(t, c.HasOption("default", "noopt"), "no option")
 }
+
+func TestConfigSet(t *testing.T) {
+	c := Map(tcfg)
+	c.Set("set", "t0", "v0")
+	IsEqual(t, c.GetRaw("set", "t0"), "v0", "set get")
+	IsEqual(t, tcfg["set"]["t0"], "v0", "set tcfg")
+}
+
+func TestConfigUpdate(t *testing.T) {
+	c := Map(tcfg)
+	c.Update("update", "t0", "v0")
+	IsEqual(t, c.GetRaw("update", "t0"), "v0", "update get")
+	IsEqual(t, tcfg["update"]["t0"], "v0", "update tcfg")
+	c.Update("update", "t0", "v1")
+	IsEqual(t, c.GetRaw("update", "t0"), "v1", "update get v1")
+	IsEqual(t, tcfg["update"]["t0"], "v1", "update tcfg v1")
+}

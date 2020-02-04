@@ -8,6 +8,7 @@ import (
 )
 
 var ErrOption = errors.New("section option not found")
+var ErrOptionSet = errors.New("section option is set already")
 
 type Option map[string]string
 
@@ -30,4 +31,20 @@ func (s *Section) GetRaw(option string) string {
 		panic(ErrOption.Format("%s: %s", s.name, option))
 	}
 	return val
+}
+
+// Set sets option's value in this section. Panics if option already exists.
+func (s *Section) Set(option, value string) {
+	_, found := s.opt[option]
+	if found {
+		panic(ErrOptionSet.Format("%s: %s", s.name, option))
+	} else {
+		s.opt[option] = value
+	}
+}
+
+// Update updates option's value in this section.
+// It is ok if the option already exists.
+func (s *Section) Update(option, value string) {
+	s.opt[option] = value
 }

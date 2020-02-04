@@ -45,6 +45,12 @@ func Map(src Cfg) *Config {
 	return &Config{src}
 }
 
+// HasSection checks if section name exists.
+func (c *Config) HasSection(name string) bool {
+	_, found := c.sect[name]
+	return found
+}
+
 // Section returns a pointer to the named section. Panics if section not found.
 func (c *Config) Section(name string) *Section {
 	s, found := c.sect[name]
@@ -54,19 +60,31 @@ func (c *Config) Section(name string) *Section {
 	return &Section{name, s}
 }
 
-// HasSection checks if section name exists.
-func (c *Config) HasSection(name string) bool {
-	_, found := c.sect[name]
-	return found
-}
-
 // HasOption checks if option exists in named section.
-func (c *Config) HasOption(section, name string) bool {
-	return c.Section(section).HasOption(name)
+func (c *Config) HasOption(section, option string) bool {
+	return c.Section(section).HasOption(option)
 }
 
 // GetRaw returns the raw string value of section's option.
 // Panics if section or option are not found or if any parsing error.
 func (c *Config) GetRaw(section, option string) string {
 	return c.Section(section).GetRaw(option)
+}
+
+// Set sets option's value in section. If section does not exists it is created.
+// Panics if option already exists.
+func (c *Config) Set(section, option, value string) {
+	if !c.HasSection(section) {
+		c.sect[section] = make(Option)
+	}
+	c.Section(section).Set(option, value)
+}
+
+// Update updates option's value in section. If section does not exists it is
+// created. It is ok if the option already exists.
+func (c *Config) Update(section, option, value string) {
+	if !c.HasSection(section) {
+		c.sect[section] = make(Option)
+	}
+	c.Section(section).Update(option, value)
 }
