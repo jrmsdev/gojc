@@ -24,6 +24,7 @@ func TestConfig(t *testing.T) {
 	c := Map(tcfg)
 	//~ t.Logf("%#v", c)
 	IsEqual(t, c.GetRaw("default", "testing"), "ok", "get raw")
+	IsFalse(t, c.HasOption("testing", "t0"), "has option")
 
 	tcfg["default"]["testing"] = "t0"
 	IsEqual(t, c.GetRaw("default", "testing"), "t0", "get raw override")
