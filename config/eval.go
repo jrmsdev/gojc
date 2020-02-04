@@ -4,14 +4,21 @@
 package config
 
 import (
-	"strings"
+	"regexp"
 )
+
+var reOption = regexp.MustCompile(`\${([0-9A-Za-z._-]+)}`)
 
 // Eval parses expr string and returns its expanded value.
 // Panics if there's any parsing error.
-func (c *Config) Eval(expr string) string {
-	expr = strings.Replace(expr, "\r", "", -1)
-	expr = strings.Replace(expr, "\n", "", -1)
-	expr = strings.TrimLeft(expr, " \t")
-	return expr
+// Expression is evaluated in the context of the named section.
+func (c *Config) Eval(section, expr string) string {
+	dst := reOption.ReplaceAllStringFunc(expr, c.evalOption(section))
+	return dst
+}
+
+func (c *Config) evalOption(section string) func(string) string {
+	return func(option string) string {
+		return c.Get(section, option[2:len(option)-1])
+	}
 }

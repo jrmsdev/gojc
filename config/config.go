@@ -92,5 +92,5 @@ func (c *Config) Update(section, option, value string) {
 // Get returns expanded value of section's option.
 // Panics if section or option are not found or if there's any parsing error.
 func (c *Config) Get(section, option string) string {
-	return c.Eval(c.Section(section).GetRaw(option))
+	return c.Eval(section, c.Section(section).GetRaw(option))
 }

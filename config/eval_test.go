@@ -17,12 +17,15 @@ var evalCfg = Cfg{
 
 func TestConfigEval(t *testing.T) {
 	c := Map(evalCfg)
-	IsEqual(t, c.Eval("testing"), "testing", "eval")
-	IsEqual(t, c.Eval("    testing"), "testing", "trim space")
-	IsEqual(t, c.Eval(" \t testing"), "testing", "trim tab and space")
-	IsEqual(t, c.Eval("\ttesting\r\n"), "testing", "trim tab and newline")
-	IsEqual(t, c.Eval("test\ting"), "test\ting", "no trim tab in the middle")
-	IsEqual(t, c.Eval("test\n\ring"), "testing", "trim newline in the middle")
+	IsEqual(t, c.Eval("default", "testing"), "testing", "eval")
+	IsEqual(t, c.Eval("default", "    testing"), "    testing", "trim space")
+	IsEqual(t, c.Eval("default", " \t testing"), " \t testing", "trim tab and space")
+	IsEqual(t, c.Eval("default", "\ttesting\r\n"), "\ttesting\r\n", "trim tab and newline")
+	IsEqual(t, c.Eval("default", "test\ting"), "test\ting", "trim tab in the middle")
+	IsEqual(t, c.Eval("default", "test\n\ring"), "test\n\ring", "trim newline in the middle")
 
-	//~ IsEqual(t, c.Eval("${testing}"), "ok", "expand")
+	IsEqual(t, c.Eval("default", ""), "", "empty expression")
+	IsEqual(t, c.Eval("default", "\t"), "\t", "tab expression")
+
+	IsEqual(t, c.Eval("default", "${testing}"), "ok", "expand")
 }
