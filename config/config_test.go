@@ -9,8 +9,8 @@ import (
 	. "github.com/jrmsdev/gojc/testing/check"
 )
 
-var tcfg = &Cfg{
-	"default": &Section{
+var tcfg = Cfg{
+	"default": Option{
 		"testing": "ok",
 	},
 }

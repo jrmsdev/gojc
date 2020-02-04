@@ -6,10 +6,16 @@ package config
 import (
 	"io"
 	//~ "os"
+
+	"github.com/jrmsdev/gojc/errors"
 )
 
+var ErrSection = errors.New("section not found")
+
+type Cfg map[string]Option
+
 type Config struct {
-	cfg *Cfg
+	sec Cfg
 }
 
 // Read parses filename content and returns a new config instance. Or an error,
@@ -35,22 +41,27 @@ func ReadFile(file io.Reader) (*Config, error) {
 }
 
 // Map creates a new config with src as it initial content.
-func Map(src *Cfg) *Config {
+func Map(src Cfg) *Config {
 	return &Config{src}
 }
 
 // Section returns a pointer to the named section. Panics if section not found.
 func (c *Config) Section(name string) *Section {
-	return c.cfg.Section(name)
+	s, found := c.sec[name]
+	if !found {
+		panic(ErrSection.Format("%s", name))
+	}
+	return &Section{name, s}
 }
 
-// HasSection returns true if section name exists.
+// HasSection checks if section name exists.
 func (c *Config) HasSection(name string) bool {
-	return c.cfg.HasSection(name)
+	_, found := c.sec[name]
+	return found
 }
 
 // GetRaw returns the raw string value of section's option.
 // Panics if section or option are not found or if any parsing error.
 func (c *Config) GetRaw(section, option string) string {
-	return c.cfg.GetRaw(section, option)
+	return c.Section(section).GetRaw(option)
 }
