@@ -24,7 +24,7 @@ func (s *Section) HasOption(name string) bool {
 }
 
 // GetRaw returns the raw string value of option from this Sectionion.
-// Panics if option does not exists.
+// Panics if option is not found.
 func (s *Section) GetRaw(option string) string {
 	val, found := s.opt[option]
 	if !found {

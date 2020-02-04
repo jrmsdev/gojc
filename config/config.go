@@ -66,7 +66,7 @@ func (c *Config) HasOption(section, option string) bool {
 }
 
 // GetRaw returns the raw string value of section's option.
-// Panics if section or option are not found or if any parsing error.
+// Panics if section or option are not found.
 func (c *Config) GetRaw(section, option string) string {
 	return c.Section(section).GetRaw(option)
 }
@@ -87,4 +87,10 @@ func (c *Config) Update(section, option, value string) {
 		c.sect[section] = make(Option)
 	}
 	c.Section(section).Update(option, value)
+}
+
+// Get returns expanded value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) Get(section, option string) string {
+	return c.Eval(c.Section(section).GetRaw(option))
 }

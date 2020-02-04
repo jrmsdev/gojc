@@ -66,3 +66,9 @@ func TestConfigUpdate(t *testing.T) {
 	IsEqual(t, c.GetRaw("update", "t0"), "v1", "update get v1")
 	IsEqual(t, tcfg["update"]["t0"], "v1", "update tcfg v1")
 }
+
+func TestConfigGet(t *testing.T) {
+	c := Map(tcfg)
+	c.Update("get", "t0", "v0")
+	IsEqual(t, c.Get("get", "t0"), "v0", "get")
+}
