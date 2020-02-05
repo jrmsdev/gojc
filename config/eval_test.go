@@ -16,7 +16,7 @@ var evalCfg = Cfg{
 }
 
 func TestConfigEval(t *testing.T) {
-	c := Map(evalCfg)
+	c := New(evalCfg)
 	IsEqual(t, c.Eval("default", "testing"), "testing", "eval")
 	IsEqual(t, c.Eval("default", "    testing"), "    testing", "trim space")
 	IsEqual(t, c.Eval("default", " \t testing"), " \t testing", "trim tab and space")

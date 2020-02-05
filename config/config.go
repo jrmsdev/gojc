@@ -21,9 +21,17 @@ type Config struct {
 	sect Cfg
 }
 
+func New(defaults Cfg) *Config {
+	c := &Config{make(Cfg)}
+	if defaults != nil {
+		c.Map(defaults)
+	}
+	return c
+}
+
 // Read parses filename content and returns a new config instance. Or an error,
 // if any.
-func Read(filename string) (*Config, error) {
+func (c *Config) Read(filename string) (*Config, error) {
 	//~ fh, err := os.Open(filename)
 	//~ if err != nil {
 		//~ return nil, err
@@ -34,7 +42,7 @@ func Read(filename string) (*Config, error) {
 }
 
 // ReadFile acts like Read but using a file pointer instead of a filename.
-func ReadFile(file io.Reader) (*Config, error) {
+func (c *Config) ReadFile(file io.Reader) (*Config, error) {
 	//~ c, err := parseFile(file)
 	//~ if err != nil {
 		//~ return nil, err
@@ -45,21 +53,12 @@ func ReadFile(file io.Reader) (*Config, error) {
 
 // Map creates a new config with src as it initial content.
 // Panics if there's any error, like empty section names and such.
-func Map(src Cfg) *Config {
-	dst := make(Cfg)
-	for sn, s := range src {
-		if sn == "" {
-			panic(ErrEmptySection)
-		}
-		dst[sn] = make(Option)
-		for on, o := range s {
-			if on == "" {
-				panic(ErrEmptyOption.Format(sn))
-			}
-			dst[sn][on] = o
+func (c *Config) Map(src Cfg) {
+	for s, l := range src {
+		for o, v := range l {
+			c.Update(s, o, v)
 		}
 	}
-	return &Config{dst}
 }
 
 // HasSection checks if section name exists.

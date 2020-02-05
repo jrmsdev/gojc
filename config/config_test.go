@@ -21,7 +21,7 @@ func checkArg(c *Config, arg string) string {
 }
 
 func TestConfig(t *testing.T) {
-	c := Map(tcfg)
+	c := New(tcfg)
 	//~ t.Logf("%#v", c)
 	IsEqual(t, c.GetRaw("default", "testing"), "ok", "get raw")
 	IsFalse(t, c.HasOption("testing", "t0"), "has option")
@@ -52,14 +52,14 @@ func TestConfig(t *testing.T) {
 }
 
 func TestConfigSet(t *testing.T) {
-	c := Map(tcfg)
+	c := New(tcfg)
 	c.Set("set", "t0", "v0")
 	IsEqual(t, c.GetRaw("set", "t0"), "v0", "set get")
 	IsEqual(t, tcfg["set"]["t0"], "", "set tcfg")
 }
 
 func TestConfigUpdate(t *testing.T) {
-	c := Map(tcfg)
+	c := New(tcfg)
 	c.Update("update", "t0", "v0")
 	IsEqual(t, c.GetRaw("update", "t0"), "v0", "update get")
 	IsEqual(t, tcfg["update"]["t0"], "", "update tcfg")
@@ -69,13 +69,13 @@ func TestConfigUpdate(t *testing.T) {
 }
 
 func TestConfigGet(t *testing.T) {
-	c := Map(tcfg)
+	c := New(tcfg)
 	c.Update("get", "t0", "v0")
 	IsEqual(t, c.Get("get", "t0"), "v0", "get")
 }
 
 func TestConfigParse(t *testing.T) {
-	c := Map(tcfg)
+	c := New(tcfg)
 	c.Update("x", "y", "true")
 	IsTrue(t, c.GetBool("x", "y"), "get true bool")
 
