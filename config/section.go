@@ -24,6 +24,10 @@ type Section struct {
 	opt  Option
 }
 
+func newSection(cfg *Config, name string) *Section {
+	return &Section{cfg, name, make(Option)}
+}
+
 // HasOption checks if the named option exists in this section.
 func (s *Section) HasOption(name string) bool {
 	_, found := s.opt[name]

@@ -29,14 +29,14 @@ func TestConfig(t *testing.T) {
 	tcfg["default"]["testing"] = "t0"
 	IsEqual(t, c.GetRaw("default", "testing"), "ok", "overwrite map src")
 
-	c.sect["default"]["testing"] = "t1"
+	c.sect["default"].opt["testing"] = "t1"
 	IsEqual(t, tcfg["default"]["testing"], "t0", "tcfg override")
 	IsEqual(t, c.GetRaw("default", "testing"), "t1", "overwrite c.sect")
 
 	c2 := c
 	IsEqual(t, c2.GetRaw("default", "testing"), "t1", "c2 get raw")
 
-	c2.sect["default"]["testing"] = "t2"
+	c2.sect["default"].opt["testing"] = "t2"
 	IsEqual(t, tcfg["default"]["testing"], "t0", "overwrite c2.sect")
 	IsEqual(t, c.GetRaw("default", "testing"), "t2", "c get raw")
 	IsEqual(t, c2.GetRaw("default", "testing"), "t2", "c2 get raw")

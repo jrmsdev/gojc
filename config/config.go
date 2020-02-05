@@ -16,19 +16,21 @@ var ErrEmptySection = errors.New("config section empty name")
 type Cfg map[string]Option
 
 type Config struct {
-	sect Cfg
+	sect map[string]*Section
 }
 
+// New creates a new config object. If defaults is not nil, it's Map'ed as its
+// initial content.
 func New(defaults Cfg) *Config {
-	c := &Config{make(Cfg)}
+	c := &Config{make(map[string]*Section)}
 	if defaults != nil {
 		c.Map(defaults)
 	}
 	return c
 }
 
-// Map creates a new config with src as it initial content.
-// Panics if there's any error, like empty section names and such.
+// Map updates config data from src.
+// Panics if there's any error, like empty section or option names.
 func (c *Config) Map(src Cfg) {
 	for s, l := range src {
 		for o, v := range l {
@@ -71,7 +73,7 @@ func (c *Config) Section(name string) *Section {
 	if !found {
 		panic(ErrSection.Format(name))
 	}
-	return &Section{c, name, s}
+	return s
 }
 
 // HasOption checks if option exists in named section.
@@ -89,7 +91,7 @@ func (c *Config) Set(section, option, value string) {
 		panic(ErrEmptySection)
 	}
 	if !c.HasSection(section) {
-		c.sect[section] = make(Option)
+		c.sect[section] = newSection(c, section)
 	}
 	c.Section(section).Set(option, value)
 }
@@ -101,7 +103,7 @@ func (c *Config) Update(section, option, value string) {
 		panic(ErrEmptySection)
 	}
 	if !c.HasSection(section) {
-		c.sect[section] = make(Option)
+		c.sect[section] = newSection(c, section)
 	}
 	c.Section(section).Update(option, value)
 }

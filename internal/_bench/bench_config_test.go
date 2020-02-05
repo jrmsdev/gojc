@@ -17,6 +17,21 @@ var bcfg = config.Cfg{
 	},
 }
 
+func BenchmarkConfigSet(b *testing.B) {
+	c := config.New(bcfg)
+	for i := 0; i < b.N; i++ {
+		c.Set("default", strconv.Itoa(i), "x")
+	}
+}
+
+func BenchmarkConfigUpdate(b *testing.B) {
+	c := config.New(bcfg)
+	c.Set("default", "x", "")
+	for i := 0; i < b.N; i++ {
+		c.Update("default", "x", strconv.Itoa(i))
+	}
+}
+
 func BenchmarkConfigMap(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		config.New(bcfg)
@@ -44,17 +59,34 @@ func BenchmarkConfigGet(b *testing.B) {
 	}
 }
 
-func BenchmarkConfigSet(b *testing.B) {
+func BenchmarkConfigGetBool(b *testing.B) {
 	c := config.New(bcfg)
+	c.Update("bench", "bool", "true")
 	for i := 0; i < b.N; i++ {
-		c.Set("default", strconv.Itoa(i), "x")
+		c.GetBool("bench", "bool")
 	}
 }
 
-func BenchmarkConfigUpdate(b *testing.B) {
+func BenchmarkConfigGetFloat(b *testing.B) {
 	c := config.New(bcfg)
-	c.Set("default", "x", "")
+	c.Update("testing", "float", "1.2")
 	for i := 0; i < b.N; i++ {
-		c.Update("default", "x", strconv.Itoa(i))
+		c.GetFloat64("testing", "float")
+	}
+}
+
+func BenchmarkConfigGetInt(b *testing.B) {
+	c := config.New(bcfg)
+	c.Update("testing", "int", "-9")
+	for i := 0; i < b.N; i++ {
+		c.GetInt64("testing", "int")
+	}
+}
+
+func BenchmarkConfigGetUint(b *testing.B) {
+	c := config.New(bcfg)
+	c.Update("testing", "uint", "9")
+	for i := 0; i < b.N; i++ {
+		c.GetUint64("testing", "uint")
 	}
 }
