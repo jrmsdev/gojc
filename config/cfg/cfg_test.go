@@ -28,7 +28,10 @@ func TestConfigParse(t *testing.T) {
 	IsFalse(t, GetBool("x", "y"), "get false bool")
 
 	Update("x", "y", "1.2")
-	IsEqual(t, GetFloat("x", "y"), 1.2, "get float")
+	IsEqual(t, GetFloat32("x", "y"), float32(1.2), "get float32")
+
+	Update("x", "y", "1.2")
+	IsEqual(t, GetFloat64("x", "y"), float64(1.2), "get float64")
 
 	Update("x", "y", "-9")
 	IsEqual(t, GetInt("x", "y"), -9, "get int")

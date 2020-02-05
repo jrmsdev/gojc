@@ -83,7 +83,10 @@ func TestConfigParse(t *testing.T) {
 	IsFalse(t, c.GetBool("x", "y"), "get false bool")
 
 	c.Update("x", "y", "1.2")
-	IsEqual(t, c.GetFloat("x", "y"), 1.2, "get float")
+	IsEqual(t, c.GetFloat32("x", "y"), float32(1.2), "get float32")
+
+	c.Update("x", "y", "1.2")
+	IsEqual(t, c.GetFloat64("x", "y"), float64(1.2), "get float64")
 
 	c.Update("x", "y", "-9")
 	IsEqual(t, c.GetInt("x", "y"), -9, "get int")

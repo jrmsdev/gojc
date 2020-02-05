@@ -13,7 +13,7 @@ import (
 
 var ErrSection = errors.New("config section not found: %s")
 var ErrEmptySection = errors.New("config section empty name")
-var ErrOptionParse = errors.New("config section '%s' option '%s': %s parse error")
+var ErrOptionParse = errors.New("config section '%s' option '%s': %s")
 
 type Cfg map[string]Option
 
@@ -27,6 +27,16 @@ func New(defaults Cfg) *Config {
 		c.Map(defaults)
 	}
 	return c
+}
+
+// Map creates a new config with src as it initial content.
+// Panics if there's any error, like empty section names and such.
+func (c *Config) Map(src Cfg) {
+	for s, l := range src {
+		for o, v := range l {
+			c.Update(s, o, v)
+		}
+	}
 }
 
 // Read parses filename content and returns a new config instance. Or an error,
@@ -49,16 +59,6 @@ func (c *Config) ReadFile(file io.Reader) (*Config, error) {
 	//~ }
 	//~ return &Config{c}, nil
 	return nil, nil
-}
-
-// Map creates a new config with src as it initial content.
-// Panics if there's any error, like empty section names and such.
-func (c *Config) Map(src Cfg) {
-	for s, l := range src {
-		for o, v := range l {
-			c.Update(s, o, v)
-		}
-	}
 }
 
 // HasSection checks if section name exists.
@@ -125,19 +125,29 @@ func (c *Config) Get(section, option string) string {
 func (c *Config) GetBool(section, option string) bool {
 	val, err := strconv.ParseBool(c.Get(section, option))
 	if err != nil {
-		panic(ErrOptionParse.Format(section, option, "bool"))
+		panic(ErrOptionParse.Format(section, option, err))
 	}
 	return val
 }
 
-// GetFloat returns float64 value of section's option.
+// GetFloat32 returns float32 value of section's option.
 // Panics if section or option are not found or if there's any parsing error.
-func (c *Config) GetFloat(section, option string) float64 {
+func (c *Config) GetFloat32(section, option string) float32 {
+	val, err := strconv.ParseFloat(c.Get(section, option), 32)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return float32(val)
+}
+
+// GetFloat64 returns float64 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetFloat64(section, option string) float64 {
 	val, err := strconv.ParseFloat(c.Get(section, option), 64)
 	if err != nil {
-		panic(ErrOptionParse.Format(section, option, "float"))
+		panic(ErrOptionParse.Format(section, option, err))
 	}
-	return val
+	return float64(val)
 }
 
 // GetInt returns int value of section's option.
@@ -145,7 +155,7 @@ func (c *Config) GetFloat(section, option string) float64 {
 func (c *Config) GetInt(section, option string) int {
 	val, err := strconv.ParseInt(c.Get(section, option), 0, 0)
 	if err != nil {
-		panic(ErrOptionParse.Format(section, option, "int"))
+		panic(ErrOptionParse.Format(section, option, err))
 	}
 	return int(val)
 }
@@ -195,7 +205,7 @@ func (c *Config) GetInt64(section, option string) int64 {
 func (c *Config) GetUint(section, option string) uint {
 	val, err := strconv.ParseUint(c.Get(section, option), 0, 0)
 	if err != nil {
-		panic(ErrOptionParse.Format(section, option, "uint"))
+		panic(ErrOptionParse.Format(section, option, err))
 	}
 	return uint(val)
 }

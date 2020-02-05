@@ -16,6 +16,12 @@ func init() {
 	cfg = config.New(nil)
 }
 
+// Map creates a new config with src as it initial content.
+// Panics if there's any error, like empty section names and such.
+func Map(src config.Cfg) {
+	cfg.Map(src)
+}
+
 // Read parses filename content and returns a new config instance. Or an error,
 // if any.
 func Read(filename string) (*config.Config, error) {
@@ -25,12 +31,6 @@ func Read(filename string) (*config.Config, error) {
 // ReadFile acts like Read but using a file pointer instead of a filename.
 func ReadFile(file io.Reader) (*config.Config, error) {
 	return cfg.ReadFile(file)
-}
-
-// Map creates a new config with src as it initial content.
-// Panics if there's any error, like empty section names and such.
-func Map(src config.Cfg) {
-	cfg.Map(src)
 }
 
 // HasSection checks if section name exists.
@@ -78,10 +78,16 @@ func GetBool(section, option string) bool {
 	return cfg.GetBool(section, option)
 }
 
-// GetFloat returns float64 value of section's option.
+// GetFloat32 returns float32 value of section's option.
 // Panics if section or option are not found or if there's any parsing error.
-func GetFloat(section, option string) float64 {
-	return cfg.GetFloat(section, option)
+func GetFloat32(section, option string) float32 {
+	return cfg.GetFloat32(section, option)
+}
+
+// GetFloat64 returns float64 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func GetFloat64(section, option string) float64 {
+	return cfg.GetFloat64(section, option)
 }
 
 // GetInt returns int value of section's option.
