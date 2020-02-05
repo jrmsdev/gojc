@@ -4,14 +4,13 @@
 package config
 
 import (
-	"io"
-	//~ "os"
-
 	"github.com/jrmsdev/gojc/errors"
 )
 
-var ErrSection = errors.New("config section not found: %s")
-var ErrEmptySection = errors.New("config section empty name")
+var (
+	ErrSection = errors.New("config section not found: %s")
+	ErrEmptySection = errors.New("config section empty name")
+)
 
 type Cfg map[string]Option
 
@@ -29,7 +28,7 @@ func New(defaults Cfg) *Config {
 	return c
 }
 
-// Map updates config data from src.
+// Map updates config data from src Cfg instance.
 // Panics if there's any error, like empty section or option names.
 func (c *Config) Map(src Cfg) {
 	for s, l := range src {
@@ -37,28 +36,6 @@ func (c *Config) Map(src Cfg) {
 			c.Update(s, o, v)
 		}
 	}
-}
-
-// Read parses filename content and returns a new config instance. Or an error,
-// if any.
-func (c *Config) Read(filename string) (*Config, error) {
-	//~ fh, err := os.Open(filename)
-	//~ if err != nil {
-		//~ return nil, err
-	//~ }
-	//~ defer fh.Close()
-	//~ return ReadFile(fh)
-	return nil, nil
-}
-
-// ReadFile acts like Read but using a file pointer instead of a filename.
-func (c *Config) ReadFile(file io.Reader) (*Config, error) {
-	//~ c, err := parseFile(file)
-	//~ if err != nil {
-		//~ return nil, err
-	//~ }
-	//~ return &Config{c}, nil
-	return nil, nil
 }
 
 // HasSection checks if section name exists.
