@@ -73,3 +73,45 @@ func TestConfigGet(t *testing.T) {
 	c.Update("get", "t0", "v0")
 	IsEqual(t, c.Get("get", "t0"), "v0", "get")
 }
+
+func TestConfigParse(t *testing.T) {
+	c := Map(tcfg)
+	c.Update("x", "y", "true")
+	IsTrue(t, c.GetBool("x", "y"), "get true bool")
+
+	c.Update("x", "y", "false")
+	IsFalse(t, c.GetBool("x", "y"), "get false bool")
+
+	c.Update("x", "y", "1.2")
+	IsEqual(t, c.GetFloat("x", "y"), 1.2, "get float")
+
+	c.Update("x", "y", "-9")
+	IsEqual(t, c.GetInt("x", "y"), -9, "get int")
+
+	c.Update("x", "y", "-9")
+	IsEqual(t, c.GetInt8("x", "y"), int8(-9), "get int8")
+
+	c.Update("x", "y", "-9")
+	IsEqual(t, c.GetInt16("x", "y"), int16(-9), "get int16")
+
+	c.Update("x", "y", "-9")
+	IsEqual(t, c.GetInt32("x", "y"), int32(-9), "get int32")
+
+	c.Update("x", "y", "-9")
+	IsEqual(t, c.GetInt64("x", "y"), int64(-9), "get int64")
+
+	c.Update("x", "y", "9")
+	IsEqual(t, c.GetUint("x", "y"), uint(9), "get uint")
+
+	c.Update("x", "y", "9")
+	IsEqual(t, c.GetUint8("x", "y"), uint8(9), "get uint8")
+
+	c.Update("x", "y", "9")
+	IsEqual(t, c.GetUint16("x", "y"), uint16(9), "get uint16")
+
+	c.Update("x", "y", "9")
+	IsEqual(t, c.GetUint32("x", "y"), uint32(9), "get uint32")
+
+	c.Update("x", "y", "9")
+	IsEqual(t, c.GetUint64("x", "y"), uint64(9), "get uint64")
+}

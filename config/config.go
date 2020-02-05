@@ -6,12 +6,14 @@ package config
 import (
 	"io"
 	//~ "os"
+	"strconv"
 
 	"github.com/jrmsdev/gojc/errors"
 )
 
 var ErrSection = errors.New("config section not found: %s")
 var ErrEmptySection = errors.New("config section empty name")
+var ErrOptionParse = errors.New("config section '%s' option '%s': %s parse error")
 
 type Cfg map[string]Option
 
@@ -114,7 +116,127 @@ func (c *Config) GetRaw(section, option string) string {
 }
 
 // Get returns expanded value of section's option.
-// Panics if section or option are not found or if there's any parsing error.
+// Panics if section or option are not found or if there's any Eval error.
 func (c *Config) Get(section, option string) string {
 	return c.Eval(section, c.Section(section).GetRaw(option))
+}
+
+// GetBool returns bool value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetBool(section, option string) bool {
+	val, err := strconv.ParseBool(c.Get(section, option))
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, "bool"))
+	}
+	return val
+}
+
+// GetFloat returns float64 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetFloat(section, option string) float64 {
+	val, err := strconv.ParseFloat(c.Get(section, option), 64)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, "float"))
+	}
+	return val
+}
+
+// GetInt returns int value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetInt(section, option string) int {
+	val, err := strconv.ParseInt(c.Get(section, option), 0, 0)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, "int"))
+	}
+	return int(val)
+}
+
+// GetInt8 returns int8 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetInt8(section, option string) int8 {
+	val, err := strconv.ParseInt(c.Get(section, option), 0, 8)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return int8(val)
+}
+
+// GetInt16 returns int16 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetInt16(section, option string) int16 {
+	val, err := strconv.ParseInt(c.Get(section, option), 0, 16)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return int16(val)
+}
+
+// GetInt32 returns int32 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetInt32(section, option string) int32 {
+	val, err := strconv.ParseInt(c.Get(section, option), 0, 32)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return int32(val)
+}
+
+// GetInt64 returns int64 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetInt64(section, option string) int64 {
+	val, err := strconv.ParseInt(c.Get(section, option), 0, 64)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return int64(val)
+}
+
+// GetUint returns uint value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetUint(section, option string) uint {
+	val, err := strconv.ParseUint(c.Get(section, option), 0, 0)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, "uint"))
+	}
+	return uint(val)
+}
+
+// GetUint8 returns uint8 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetUint8(section, option string) uint8 {
+	val, err := strconv.ParseUint(c.Get(section, option), 0, 8)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return uint8(val)
+}
+
+// GetUint16 returns uint16 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetUint16(section, option string) uint16 {
+	val, err := strconv.ParseUint(c.Get(section, option), 0, 16)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return uint16(val)
+}
+
+// GetUint32 returns uint32 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetUint32(section, option string) uint32 {
+	val, err := strconv.ParseUint(c.Get(section, option), 0, 32)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return uint32(val)
+}
+
+// GetUint64 returns uint64 value of section's option.
+// Panics if section or option are not found or if there's any parsing error.
+func (c *Config) GetUint64(section, option string) uint64 {
+	val, err := strconv.ParseUint(c.Get(section, option), 0, 64)
+	if err != nil {
+		panic(ErrOptionParse.Format(section, option, err))
+	}
+	return uint64(val)
 }
