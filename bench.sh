@@ -6,6 +6,6 @@ if test "X" = "X${ARGS}"; then
 fi
 for fn in $(ls ./internal/_bench/*.go); do
 	echo "--- ${fn}"
-	go test -bench=${ARGS} ${fn}
+	go test -benchmem -bench=${ARGS} ${fn}
 done
 exit 0
