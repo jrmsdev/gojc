@@ -64,12 +64,17 @@ func (c *Config) Sections() []string {
 	return l
 }
 
-// HasOption checks if option exists in named section.
+// HasOption checks if option exists in section.
 func (c *Config) HasOption(section, option string) bool {
 	if !c.HasSection(section) {
 		return false
 	}
 	return c.Section(section).HasOption(option)
+}
+
+// Options returns a list of all option names in section.
+func (c *Config) Options(section string) []string {
+	return c.Section(section).Options()
 }
 
 // Set sets option's value in section. If section does not exists it is created.

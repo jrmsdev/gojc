@@ -51,6 +51,7 @@ func TestConfig(t *testing.T) {
 	IsFalse(t, c.HasOption("default", "noopt"), "no option")
 
 	IsEqual(t, len(c.Sections()), 0, "sections list")
+	IsEqual(t, len(c.Options("default")), 1, "options list")
 }
 
 func TestConfigSet(t *testing.T) {

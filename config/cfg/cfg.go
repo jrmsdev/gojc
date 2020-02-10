@@ -42,9 +42,20 @@ func Section(name string) *config.Section {
 	return cfg.Section(name)
 }
 
-// HasOption checks if option exists in named section.
+// Sections returns a list of all section names.
+// The default section is not included, even if explicitly set in config file.
+func Sections() []string {
+	return cfg.Sections()
+}
+
+// HasOption checks if option exists in section.
 func HasOption(section, option string) bool {
 	return cfg.HasOption(section, option)
+}
+
+// Options returns a list of all option names in section.
+func Options(section string) []string {
+	return cfg.Options(section)
 }
 
 // Set sets option's value in section. If section does not exists it is created.

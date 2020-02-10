@@ -34,6 +34,15 @@ func (s *Section) HasOption(name string) bool {
 	return found
 }
 
+// Options returns a list of all option names in this section.
+func (s *Section) Options() []string {
+	l := make([]string, 0)
+	for n := range s.opt {
+		l = append(l, n)
+	}
+	return l
+}
+
 // Set sets option's value in this section. Panics if option already exists.
 func (s *Section) Set(option, value string) {
 	if option == "" {

@@ -42,6 +42,8 @@ func TestConfigRead(t *testing.T) {
 	IsEqual(t, c.GetRaw("testing", "opt1"), "${default:testing}", "get raw opt1")
 	IsEqual(t, c.Get("testing", "opt1"), "ok", "get opt1")
 	IsEqual(t, len(c.Sections()), 1, "sections list")
+	IsEqual(t, len(c.Options("default")), 1, "default options list")
+	IsEqual(t, len(c.Options("testing")), 2, "testing options list")
 }
 
 func TestConfigEvalRead(t *testing.T) {
