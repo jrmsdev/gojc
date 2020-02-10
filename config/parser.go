@@ -44,6 +44,9 @@ func (c *Config) ReadFile(file io.ReadSeeker) (err error) {
 	err = nil
 	s := make([]byte, 1)
 	if _, err := file.Read(s); err != nil {
+		if err == io.EOF {
+			return nil
+		}
 		return err
 	}
 	if _, err := file.Seek(0, 0); err != nil {
@@ -60,7 +63,7 @@ func (c *Config) ReadFile(file io.ReadSeeker) (err error) {
 	}()
 	if string(s) == "{" {
 		b, e := ioutil.ReadAll(file)
-		if e != nil {
+		if e != nil && e != io.EOF {
 			return e
 		}
 		c.MapJSON(b)

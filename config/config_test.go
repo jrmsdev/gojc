@@ -74,7 +74,7 @@ func TestConfigGet(t *testing.T) {
 	IsEqual(t, c.Get("get", "t0"), "v0", "get")
 }
 
-func TestConfigParse(t *testing.T) {
+func TestConfigEvalGet(t *testing.T) {
 	c := New(tcfg)
 	c.Update("x", "y", "true")
 	IsTrue(t, c.GetBool("x", "y"), "get true bool")

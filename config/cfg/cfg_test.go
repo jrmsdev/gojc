@@ -17,7 +17,7 @@ var tcfg = config.Cfg{
 	},
 }
 
-func TestConfigParse(t *testing.T) {
+func TestCfg(t *testing.T) {
 	Map(tcfg)
 	IsEqual(t, Get("default", "testing"), "ok", "get map value")
 
