@@ -4,6 +4,7 @@
 package config
 
 import (
+	"fmt"
 	"testing"
 
 	. "github.com/jrmsdev/gojc/testing/check"
@@ -41,6 +42,7 @@ func TestConfigRead(t *testing.T) {
 	IsEqual(t, c.GetRaw("testing", "opt0"), "val0", "get raw opt0")
 	IsEqual(t, c.GetRaw("testing", "opt1"), "${default:testing}", "get raw opt1")
 	IsEqual(t, c.Get("testing", "opt1"), "ok", "get opt1")
+	IsEqual(t, fmt.Sprintf("%v", c.Sections()), "[default testing]", "sections list")
 }
 
 func TestConfigEvalRead(t *testing.T) {
@@ -62,5 +64,5 @@ func TestConfigReadEmptyFile(t *testing.T) {
 	c := New(nil)
 	err := c.Read("testdata/empty.ini")
 	Fatal(t, IsNil(t, err, "read error"))
-	// TODO: check c.Sections() is empty list (default section not included in that list).
+	IsEqual(t, fmt.Sprintf("%v", c.Sections()), "[]", "sections list")
 }

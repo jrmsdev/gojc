@@ -53,6 +53,16 @@ func (c *Config) Section(name string) *Section {
 	return s
 }
 
+// Sections returns a list of all section names.
+// The default section is not included, even if explicitly set in config file.
+func (c *Config) Sections() []string {
+	l := make([]string, 0)
+	for n := range c.sect {
+		l = append(l, n)
+	}
+	return l
+}
+
 // HasOption checks if option exists in named section.
 func (c *Config) HasOption(section, option string) bool {
 	if !c.HasSection(section) {

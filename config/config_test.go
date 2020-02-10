@@ -4,6 +4,7 @@
 package config
 
 import (
+	"fmt"
 	"testing"
 
 	. "github.com/jrmsdev/gojc/testing/check"
@@ -49,6 +50,8 @@ func TestConfig(t *testing.T) {
 
 	IsTrue(t, c.HasOption("default", "testing"), "default option")
 	IsFalse(t, c.HasOption("default", "noopt"), "no option")
+
+	IsEqual(t, fmt.Sprintf("%v", c.Sections()), "[default]", "sections list")
 }
 
 func TestConfigSet(t *testing.T) {
