@@ -25,16 +25,17 @@ func TestMapJSON(t *testing.T) {
 	IsEqual(t, c.Get("default", "testing"), "ok", "json map")
 }
 
-func TestRead(t *testing.T) {
-	c := New(nil)
-	err := c.Read("testdata/config.ini")
-	IsNil(t, err, "read error")
-	//~ IsEqual(t, c.GetRaw("default", "testing"), "ok", "get raw")
-}
-
 func TestReadJSON(t *testing.T) {
 	c := New(nil)
 	err := c.Read("testdata/config.json")
 	IsNil(t, err, "json read error")
 	IsEqual(t, c.GetRaw("default", "testing"), "ok", "json get raw")
+}
+
+func TestRead(t *testing.T) {
+	c := New(nil)
+	err := c.Read("testdata/config.ini")
+	IsNil(t, err, "read error")
+	IsEqual(t, c.GetRaw("default", "testing"), "ok", "get raw")
+	IsEqual(t, c.GetRaw("testing", "opt0"), "val0", "get raw")
 }

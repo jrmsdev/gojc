@@ -8,15 +8,15 @@ import (
 	"strings"
 )
 
-var reOption = regexp.MustCompile(`\${([0-9A-Za-z._-]+)}`)
-var reSectionOption = regexp.MustCompile(`\${([0-9A-Za-z._-]+):([0-9A-Za-z._-]+)}`)
+var evalOption = regexp.MustCompile(`\${([0-9A-Za-z._-]+)}`)
+var evalSectionOption = regexp.MustCompile(`\${([0-9A-Za-z._-]+):([0-9A-Za-z._-]+)}`)
 
 // Eval parses expr string and returns its expanded value.
 // Panics if there's any parsing error.
 // Expression is evaluated in the context of the named section.
 func (c *Config) Eval(section, expr string) string {
-	dst := reOption.ReplaceAllStringFunc(expr, c.evalOption(section))
-	dst = reSectionOption.ReplaceAllStringFunc(dst, c.evalSectionOption(section))
+	dst := evalOption.ReplaceAllStringFunc(expr, c.evalOption(section))
+	dst = evalSectionOption.ReplaceAllStringFunc(dst, c.evalSectionOption(section))
 	return dst
 }
 

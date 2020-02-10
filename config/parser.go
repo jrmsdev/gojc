@@ -9,6 +9,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"regexp"
 
 	"github.com/jrmsdev/gojc/errors"
 )
@@ -50,7 +51,11 @@ func (c *Config) ReadFile(file io.ReadSeeker) (err error) {
 	}
 	defer func() {
 		if e := recover(); e != nil {
-			err = e.(error)
+			var ok bool
+			err, ok = e.(error)
+			if !ok {
+				panic(e)
+			}
 		}
 	}()
 	if string(s) == "{" {
@@ -64,11 +69,49 @@ func (c *Config) ReadFile(file io.ReadSeeker) (err error) {
 	return c.parse(file)
 }
 
+type optinfo struct {
+	name string
+	val string
+}
+
+var parseSection = regexp.MustCompile(`\[([0-9A-Za-z._-]+)\]`)
+
 func (c *Config) parse(file io.Reader) error {
+	src := make(Cfg)
+	sect := "default"
 	s := bufio.NewScanner(file)
 	for s.Scan() {
 		l := s.Text()
-		println(l)
+		m := parseSection.FindStringSubmatch(l)
+		if m != nil {
+			sect = m[1]
+			_, ok := src[sect]
+			if !ok {
+				src[sect] = make(Option)
+			}
+		} else {
+			opt, err := parseLine(l)
+			if err != nil {
+				return err
+			}
+			if opt != nil {
+				src[sect][opt.name] = opt.val
+			}
+		}
 	}
-	return s.Err()
+	if err := s.Err(); err != nil {
+		return err
+	}
+	c.Map(src)
+	return nil
+}
+
+var parseOption = regexp.MustCompile(`^([0-9A-Za-z._-]+) *= *(.*)$`)
+
+func parseLine(l string) (*optinfo, error) {
+	m := parseOption.FindStringSubmatch(l)
+	if m != nil {
+		return &optinfo{m[1], m[2]}, nil
+	}
+	return nil, nil
 }
