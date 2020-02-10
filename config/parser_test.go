@@ -30,6 +30,7 @@ func TestReadJSON(t *testing.T) {
 	err := c.Read("testdata/config.json")
 	IsNil(t, err, "json read error")
 	IsEqual(t, c.GetRaw("default", "testing"), "ok", "json get raw")
+	IsEqual(t, c.Get("testing", "opt"), "ok", "json get")
 }
 
 func TestRead(t *testing.T) {
