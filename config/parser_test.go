@@ -47,7 +47,15 @@ func TestConfigEvalRead(t *testing.T) {
 	c := New(nil)
 	err := c.Read("testdata/eval.ini")
 	Fatal(t, IsNil(t, err, "read error"))
+	IsTrue(t, c.GetBool("testing", "boolTrue"), "get bool true")
+	IsFalse(t, c.GetBool("testing", "boolFalse"), "get bool false")
+	IsEqual(t, c.GetFloat32("testing", "float32"), float32(9.9), "get float32")
+	IsEqual(t, c.GetFloat64("testing", "float64"), float64(9.9), "get float64")
 	IsEqual(t, c.GetInt("testing", "int"), -9, "get int")
+	IsEqual(t, c.GetInt8("testing", "int8"), int8(-9), "get int8")
+	IsEqual(t, c.GetInt16("testing", "int16"), int16(-9), "get int16")
+	IsEqual(t, c.GetInt32("testing", "int32"), int32(-9), "get int32")
+	IsEqual(t, c.GetInt64("testing", "int64"), int64(-9), "get int64")
 }
 
 func TestConfigReadEmptyFile(t *testing.T) {
