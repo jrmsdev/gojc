@@ -22,14 +22,13 @@ func Map(src config.Cfg) {
 	cfg.Map(src)
 }
 
-// Read parses filename content and returns a new config instance. Or an error,
-// if any.
-func Read(filename string) (*config.Config, error) {
+// Read acts like ReadFile but using a filename instead.
+func Read(filename string) error {
 	return cfg.Read(filename)
 }
 
-// ReadFile acts like Read but using a file pointer instead of a filename.
-func ReadFile(file io.Reader) (*config.Config, error) {
+// ReadFile parses file's content. Returns an error if any.
+func ReadFile(file io.ReadSeeker) error {
 	return cfg.ReadFile(file)
 }
 

@@ -4,8 +4,11 @@
 package config
 
 import (
+	"bufio"
 	"encoding/json"
 	"io"
+	"io/ioutil"
+	"os"
 
 	"github.com/jrmsdev/gojc/errors"
 )
@@ -16,33 +19,56 @@ var (
 
 // MapJSON updates config data from src json string.
 // Panics if there's any error.
-func (c *Config) MapJSON(src string) {
+func (c *Config) MapJSON(src []byte) {
 	dst := make(Cfg)
-	err := json.Unmarshal([]byte(src), &dst)
+	err := json.Unmarshal(src, &dst)
 	if err != nil {
 		panic(ErrParse.Format(err))
 	}
 	c.Map(dst)
 }
 
-// Read parses filename content and returns a new config instance. Or an error,
-// if any.
-func (c *Config) Read(filename string) (*Config, error) {
-	//~ fh, err := os.Open(filename)
-	//~ if err != nil {
-		//~ return nil, err
-	//~ }
-	//~ defer fh.Close()
-	//~ return ReadFile(fh)
-	return nil, nil
+// Read acts like ReadFile but using a filename instead.
+func (c *Config) Read(filename string) error {
+	fh, err := os.Open(filename)
+	if err != nil {
+		return err
+	}
+	defer fh.Close()
+	return c.ReadFile(fh)
 }
 
-// ReadFile acts like Read but using a file pointer instead of a filename.
-func (c *Config) ReadFile(file io.Reader) (*Config, error) {
-	//~ c, err := parseFile(file)
-	//~ if err != nil {
-		//~ return nil, err
-	//~ }
-	//~ return &Config{c}, nil
-	return nil, nil
+// ReadFile parses file's content. Returns an error if any.
+func (c *Config) ReadFile(file io.ReadSeeker) (err error) {
+	err = nil
+	s := make([]byte, 1)
+	if _, err := file.Read(s); err != nil {
+		return err
+	}
+	if _, err := file.Seek(0, 0); err != nil {
+		return err
+	}
+	defer func() {
+		if e := recover(); e != nil {
+			err = e.(error)
+		}
+	}()
+	if string(s) == "{" {
+		b, e := ioutil.ReadAll(file)
+		if e != nil {
+			return e
+		}
+		c.MapJSON(b)
+		return err
+	}
+	return c.parse(file)
+}
+
+func (c *Config) parse(file io.Reader) error {
+	s := bufio.NewScanner(file)
+	for s.Scan() {
+		l := s.Text()
+		println(l)
+	}
+	return s.Err()
 }
