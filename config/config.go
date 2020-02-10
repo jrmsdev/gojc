@@ -58,6 +58,7 @@ func (c *Config) Section(name string) *Section {
 func (c *Config) Sections() []string {
 	l := make([]string, 0)
 	for n := range c.sect {
+		if n == "default" { continue }
 		l = append(l, n)
 	}
 	return l
