@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ErrSection = errors.New("config section not found: %s")
+	ErrSection      = errors.New("config section not found: %s")
 	ErrEmptySection = errors.New("config section empty name")
 )
 

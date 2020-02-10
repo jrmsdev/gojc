@@ -71,7 +71,7 @@ func (c *Config) ReadFile(file io.ReadSeeker) (err error) {
 
 type optinfo struct {
 	name string
-	val string
+	val  string
 }
 
 var parseSection = regexp.MustCompile(`\[([0-9A-Za-z._-]+)\]`)

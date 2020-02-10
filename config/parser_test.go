@@ -37,5 +37,7 @@ func TestRead(t *testing.T) {
 	err := c.Read("testdata/config.ini")
 	IsNil(t, err, "read error")
 	IsEqual(t, c.GetRaw("default", "testing"), "ok", "get raw")
-	IsEqual(t, c.GetRaw("testing", "opt0"), "val0", "get raw")
+	IsEqual(t, c.GetRaw("testing", "opt0"), "val0", "get raw opt0")
+	IsEqual(t, c.GetRaw("testing", "opt1"), "${default:testing}", "get raw opt1")
+	IsEqual(t, c.Get("testing", "opt1"), "ok", "get opt1")
 }

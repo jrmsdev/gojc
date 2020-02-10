@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	ErrOption = errors.New("config section '%s' option '%s': not found")
-	ErrOptionSet = errors.New("config section '%s' option '%s': already set")
+	ErrOption      = errors.New("config section '%s' option '%s': not found")
+	ErrOptionSet   = errors.New("config section '%s' option '%s': already set")
 	ErrEmptyOption = errors.New("config section '%s': empty option name")
 	ErrOptionParse = errors.New("config section '%s' option '%s': %s")
 )
