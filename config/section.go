@@ -72,7 +72,11 @@ func (s *Section) Update(option, value string) {
 func (s *Section) GetRaw(option string) string {
 	val, found := s.opt[option]
 	if !found {
-		panic(ErrOption.Format(s.name, option))
+		if s.name != "default" && s.cfg.HasOption("default", option) {
+			return s.cfg.GetRaw("default", option)
+		} else {
+			panic(ErrOption.Format(s.name, option))
+		}
 	}
 	return val
 }

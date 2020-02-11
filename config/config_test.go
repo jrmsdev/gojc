@@ -121,3 +121,13 @@ func TestConfigEvalGet(t *testing.T) {
 	c.Update("x", "y", "9")
 	IsEqual(t, c.GetUint64("x", "y"), uint64(9), "get uint64")
 }
+
+func TestConfigGetDefault(t *testing.T) {
+	c := New(tcfg)
+	c.Update("default", "a", "defa")
+	c.Update("x", "b", "xb")
+	IsEqual(t, c.Get("x", "b"), "xb", "get x")
+	IsEqual(t, c.Get("x", "a"), "defa", "get default")
+	IsFalse(t, c.HasOption("x", "a"), "has default option")
+	IsTrue(t, c.HasOption("x", "b"), "xb option")
+}
