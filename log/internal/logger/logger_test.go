@@ -177,10 +177,13 @@ func TestLoggerFlags(t *testing.T) {
 	IsEqual(t, log.Flags(), flagsDefault, "off flags")
 	l.SetLevel(MSG)
 	IsEqual(t, log.Flags(), flagsDefault, "msg flags")
-	l.SetColors(true)
-	IsEqual(t, log.Flags(), flagsColored, "colored flags")
 	l.SetLevel(DEBUG)
 	IsEqual(t, log.Flags(), flagsDebug, "debug flags")
+	l.SetColors(true)
+	l.SetLevel(MSG)
+	IsEqual(t, log.Flags(), flagsColored, "colored flags")
+	l.SetLevel(DEBUG)
+	IsEqual(t, log.Flags(), flagsColoredDebug, "colored debug flags")
 }
 
 func TestLoggerLevelColorFlags(t *testing.T) {
@@ -192,7 +195,7 @@ func TestLoggerLevelColorFlags(t *testing.T) {
 	l.SetColors(true)
 	IsEqual(t, log.Flags(), flagsColored, "colored flags")
 	l.SetLevel(DEBUG)
-	IsEqual(t, log.Flags(), flagsDebug, "debug flags")
+	IsEqual(t, log.Flags(), flagsColoredDebug, "colored debug flags")
 	l.SetColors(false)
 	IsEqual(t, log.Flags(), flagsDebug, "no color debug flags")
 	l.SetLevel(MSG)
