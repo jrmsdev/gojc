@@ -46,6 +46,7 @@ to each message.
 package log
 
 import (
+	"flag"
 	"os"
 
 	gfmt "fmt"
@@ -85,9 +86,19 @@ func init() {
 	l = logger.New(logger.OFF, colored)
 }
 
+// default level - can be set from command line flags
+var deflvl string = "default"
+
+// Flags sets the log command line flag option.
+// It sets the value to be used at Init() time.
+func Flags() {
+	flag.StringVar(&deflvl, "log", deflvl,
+		"set `level`: quiet, off, error, warn, info, debug")
+}
+
 // Init sets the logger to the default level of messages.
 func Init() {
-	l.SetLevel(logger.MSG)
+	SetLevel(deflvl)
 }
 
 // SetLevel sets the logger level of messages.
