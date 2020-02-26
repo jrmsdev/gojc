@@ -10,12 +10,14 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/jrmsdev/gojc/errors"
 )
 
 var (
 	ErrParse = errors.New("config parse: %s")
+	ErrLineParse = errors.New("config parse, line %d: '%s'")
 )
 
 // MapJSON updates config data from src json string.
@@ -83,8 +85,14 @@ func (c *Config) parse(file io.Reader) error {
 	src := make(Cfg)
 	sect := "default"
 	s := bufio.NewScanner(file)
+	lno := 0
 	for s.Scan() {
 		l := s.Text()
+		lno += 1
+		l2 := strings.TrimSpace(l)
+		if l2 == "" || l2[0] == '#' || l2[0] == ';' {
+			continue
+		}
 		m := parseSection.FindStringSubmatch(l)
 		if m != nil {
 			sect = m[1]
@@ -93,7 +101,7 @@ func (c *Config) parse(file io.Reader) error {
 				src[sect] = make(Option)
 			}
 		} else {
-			opt, err := parseLine(l)
+			opt, err := parseLine(lno, l)
 			if err != nil {
 				return err
 			}
@@ -111,10 +119,10 @@ func (c *Config) parse(file io.Reader) error {
 
 var parseOption = regexp.MustCompile(`^([0-9A-Za-z._-]+) *= *(.*)$`)
 
-func parseLine(l string) (*optinfo, error) {
+func parseLine(lno int, l string) (*optinfo, error) {
 	m := parseOption.FindStringSubmatch(l)
 	if m != nil {
 		return &optinfo{m[1], m[2]}, nil
 	}
-	return nil, nil
+	return nil, ErrLineParse.Format(lno, l)
 }
