@@ -78,3 +78,10 @@ func TestConfigSections(t *testing.T) {
 	IsTrue(t, c.HasSection("s1"), "section s1")
 	IsTrue(t, c.HasOption("s1", "opt"), "s1 option")
 }
+
+func TestConfigSectionsError(t *testing.T) {
+	c := New(nil)
+	err := c.Read("testdata/sections-error.ini")
+	Fatal(t, NotNil(t, err, "read error"))
+	IsEqual(t, err.Error(), "config parse, line 3: '[s1] [s2]'", "error message")
+}

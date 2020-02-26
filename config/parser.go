@@ -79,7 +79,7 @@ type optinfo struct {
 	val  string
 }
 
-var parseSection = regexp.MustCompile(`\[([0-9A-Za-z._-]+)\]`)
+var parseSection = regexp.MustCompile(`^\[([0-9A-Za-z._-]+)\]$`)
 
 func (c *Config) parse(file io.Reader) error {
 	src := make(Cfg)
