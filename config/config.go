@@ -32,6 +32,9 @@ func New(defaults Cfg) *Config {
 // Panics if there's any error, like empty section or option names.
 func (c *Config) Map(src Cfg) {
 	for s, l := range src {
+		if !c.HasSection(s) {
+			c.sect[s] = newSection(c, s)
+		}
 		for o, v := range l {
 			c.Update(s, o, v)
 		}

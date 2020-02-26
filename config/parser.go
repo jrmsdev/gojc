@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	ErrParse = errors.New("config parse: %s")
+	ErrParse     = errors.New("config parse: %s")
 	ErrLineParse = errors.New("config parse, line %d: '%s'")
 )
 

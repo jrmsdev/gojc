@@ -61,12 +61,12 @@ var ErrInvalidLevel = errors.New("invalid log level: %s (%d)")
 var l *logger.Logger
 
 var level = map[string]int{
-	"off":     logger.OFF,
-	"error":   logger.ERROR,
-	"warn":    logger.WARN,
-	"msg":     logger.MSG,
-	"info":    logger.INFO,
-	"debug":   logger.DEBUG,
+	"off":   logger.OFF,
+	"error": logger.ERROR,
+	"warn":  logger.WARN,
+	"msg":   logger.MSG,
+	"info":  logger.INFO,
+	"debug": logger.DEBUG,
 }
 
 func istty(fh *os.File) bool {

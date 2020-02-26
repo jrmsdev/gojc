@@ -67,3 +67,14 @@ func TestConfigReadEmptyFile(t *testing.T) {
 	Fatal(t, IsNil(t, err, "read error"))
 	IsEqual(t, len(c.Sections()), 0, "sections list")
 }
+
+func TestConfigSections(t *testing.T) {
+	c := New(nil)
+	err := c.Read("testdata/sections.ini")
+	Fatal(t, IsNil(t, err, "read error"))
+	IsEqual(t, len(c.Sections()), 2, "sections list")
+	IsTrue(t, c.HasSection("s0"), "section s0")
+	IsFalse(t, c.HasOption("s0", "opt"), "s0 option")
+	IsTrue(t, c.HasSection("s1"), "section s1")
+	IsTrue(t, c.HasOption("s1", "opt"), "s1 option")
+}
